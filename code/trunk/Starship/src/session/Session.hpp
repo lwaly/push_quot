@@ -50,6 +50,37 @@ protected:
      */
     void DeleteCallback(Session* pSession);
 
+    bool RegisterCallback(Step* pStep);
+
+    /**
+     * @brief 删除回调步骤
+     * @param pStep 回调步骤实例
+     */
+    void DeleteCallback(Step* pStep);
+
+    uint32 GetNodeId();
+    uint32 GetWorkerIndex();
+
+    /**
+     * @brief 获取当前节点类型
+     * @return 当前节点类型
+     */
+    const std::string& GetNodeType() const;
+
+    /**
+     * @brief 获取Server自定义配置
+     * @return Server自定义配置
+     */
+    const loss::CJsonObject& GetCustomConf() const;
+
+    /**
+     * @brief 获取当前时间
+     * @note 获取当前时间，比time(NULL)速度快消耗小，不过没有time(NULL)精准，如果对时间精度
+     * 要求不是特别高，建议调用GetNowTime()替代time(NULL)
+     * @return 当前时间
+     */
+    time_t GetNowTime() const;
+
     /**
      * @brief 预处理
      * @note 预处理用于将等待预处理对象与框架建立弱联系，使被处理的对象可以获得框架一些工具，如写日志指针

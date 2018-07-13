@@ -59,6 +59,15 @@ enum E_CMD
     CMD_REQ_RELOAD_MODULE               = 33,   ///< 重新加载module请求（manager to worker）
     CMD_RSP_RELOAD_MODULE               = 34,   ///< 重新加载module响应（无须响应）
 
+    CMD_REQ_NODE_STOP                   = 35,   ///< 节点关闭请求
+    CMD_RSP_NODE_STOP                   = 36,   ///< 节点关闭应答
+
+    CMD_REQ_NODE_RESTART_WORKERS        = 37,   ///< 重启工作者请求
+    CMD_RSP_NODE_RESTART_WORKERS        = 38,   ///< 重启工作者应答
+
+    CMD_REQ_RELOAD_LOGIC_CONFIG         = 39,   ///< Center通知配置到节点服务器,重新加载逻辑配置
+    CMD_RSP_RELOAD_LOGIC_CONFIG         = 40,   ///< 节点服务器得到通知应答Center
+
     // 接入层转发命令字，如客户端数据转发给Logic，Logic数据转发给客户端等
     CMD_REQ_FROM_CLIENT                 = 501,     ///< 客户端发送过来需由接入层转发的数据，传输的MsgHead里的Cmd不会被改变（无业务逻辑直接转发的场景，如登录等接入层有业务逻辑的场景不适用）
     CMD_RSP_FROM_CLIENT                 = 502,     ///< 无意义，不会被使用

@@ -17,8 +17,8 @@
     "log_level":10000,
     "refresh_interval":1,
     "so":[
-	    {"cmd":505, "so_path":"plugins/Agent/CmdDbOper.so", "entrance_symbol":"create", "load":true, "version":1},
-        {"cmd":511, "so_path":"plugins/Agent/CmdLocateData.so", "entrance_symbol":"create", "load":true, "version":1}
+	    {"cmd":505, "so_path":"plugins/DbAgent/CmdDbOper.so", "entrance_symbol":"create", "load":true, "version":1},
+        {"cmd":511, "so_path":"plugins/DbAgent/CmdLocateData.so", "entrance_symbol":"create", "load":true, "version":1}
         ]
 }
 

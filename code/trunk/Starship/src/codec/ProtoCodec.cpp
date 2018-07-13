@@ -24,6 +24,11 @@ ProtoCodec::~ProtoCodec()
 E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff)
 {
     LOG4_TRACE("%s() pBuff->ReadableBytes()=%u", __FUNCTION__, pBuff->ReadableBytes());
+    if (oMsgBody.ByteSize() > 64000000) // pb 最大限制
+    {
+        LOG4_ERROR("oHttpMsg.ByteSize() > 64000000");
+        return (CODEC_STATUS_ERR);
+    }
     int iErrno = 0;
     int iHadWriteLen = 0;
     int iWriteLen = 0;
@@ -38,7 +43,7 @@ E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBo
     iHadWriteLen += iWriteLen;
     if (oMsgHead.msgbody_len() == 0)    // 无包体（心跳包等）
     {
-        pBuff->Compact(8192);
+//        pBuff->Compact(8192);
         return(CODEC_STATUS_OK);
     }
     iNeedWriteLen = oMsgBody.ByteSize();
@@ -46,7 +51,7 @@ E_CODEC_STATUS ProtoCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBo
     LOG4_TRACE("pBuff->ReadableBytes()=%u", pBuff->ReadableBytes());
     if (iWriteLen == iNeedWriteLen)
     {
-        pBuff->Compact(8192);      // 超过32KB则重新分配内存
+//        pBuff->Compact(8192);
         return(CODEC_STATUS_OK);
     }
     else
@@ -73,7 +78,7 @@ E_CODEC_STATUS ProtoCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBo
             if (0 == oMsgHead.msgbody_len())      // 无包体（心跳包等）
             {
                 pBuff->SkipBytes(iHeadSize);
-                pBuff->Compact(8192);
+//                pBuff->Compact(8192);
                 return(CODEC_STATUS_OK);
             }
             if (pBuff->ReadableBytes() >= iHeadSize + oMsgHead.msgbody_len())
@@ -83,7 +88,7 @@ E_CODEC_STATUS ProtoCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBo
                 if (bResult)
                 {
                     pBuff->SkipBytes(oMsgHead.ByteSize() + oMsgBody.ByteSize());
-                    pBuff->Compact(8192);      // 超过32KB则重新分配内存
+//                    pBuff->Compact(8192);
                     return(CODEC_STATUS_OK);
                 }
                 else

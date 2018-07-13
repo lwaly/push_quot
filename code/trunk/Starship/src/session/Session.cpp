@@ -46,6 +46,41 @@ void Session::DeleteCallback(Session* pSession)
     m_pLabor->DeleteCallback(pSession);
 }
 
+bool Session::RegisterCallback(Step* pStep)
+{
+    return(m_pLabor->RegisterCallback(pStep));
+}
+
+void Session::DeleteCallback(Step* pStep)
+{
+    m_pLabor->DeleteCallback(pStep);
+}
+
+uint32 Session::GetNodeId()
+{
+    return(m_pLabor->GetNodeId());
+}
+
+uint32 Session::GetWorkerIndex()
+{
+    return(m_pLabor->GetWorkerIndex());
+}
+
+const std::string& Session::GetNodeType() const
+{
+    return(m_pLabor->GetNodeType());
+}
+
+const loss::CJsonObject& Session::GetCustomConf() const
+{
+    return(m_pLabor->GetCustomConf());
+}
+
+time_t Session::GetNowTime() const
+{
+    return(m_pLabor->GetNowTime());
+}
+
 bool Session::Pretreat(Step* pStep)
 {
     return(m_pLabor->Pretreat(pStep));

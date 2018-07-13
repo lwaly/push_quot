@@ -35,6 +35,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* forced_offline_ntf_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   forced_offline_ntf_reflection_ = NULL;
+const ::google::protobuf::Descriptor* QuotConfigGetReq_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  QuotConfigGetReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* QuotConfigGetRes_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  QuotConfigGetRes_reflection_ = NULL;
 
 }  // namespace
 
@@ -126,6 +132,40 @@ void protobuf_AssignDesc_protocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(forced_offline_ntf));
+  QuotConfigGetReq_descriptor_ = file->message_type(5);
+  static const int QuotConfigGetReq_offsets_[1] = {
+  };
+  QuotConfigGetReq_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      QuotConfigGetReq_descriptor_,
+      QuotConfigGetReq::default_instance_,
+      QuotConfigGetReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetReq, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(QuotConfigGetReq));
+  QuotConfigGetRes_descriptor_ = file->message_type(6);
+  static const int QuotConfigGetRes_offsets_[6] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, errinfo_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, supports_search_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, supports_group_request_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, supported_resolutions_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, supports_marks_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, supports_time_),
+  };
+  QuotConfigGetRes_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      QuotConfigGetRes_descriptor_,
+      QuotConfigGetRes::default_instance_,
+      QuotConfigGetRes_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QuotConfigGetRes, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(QuotConfigGetRes));
 }
 
 namespace {
@@ -148,6 +188,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
     ulogout_ack_descriptor_, &ulogout_ack::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     forced_offline_ntf_descriptor_, &forced_offline_ntf::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    QuotConfigGetReq_descriptor_, &QuotConfigGetReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    QuotConfigGetRes_descriptor_, &QuotConfigGetRes::default_instance());
 }
 
 }  // namespace
@@ -163,6 +207,10 @@ void protobuf_ShutdownFile_protocol_2eproto() {
   delete ulogout_ack_reflection_;
   delete forced_offline_ntf::default_instance_;
   delete forced_offline_ntf_reflection_;
+  delete QuotConfigGetReq::default_instance_;
+  delete QuotConfigGetReq_reflection_;
+  delete QuotConfigGetRes::default_instance_;
+  delete QuotConfigGetRes_reflection_;
 }
 
 void protobuf_AddDesc_protocol_2eproto() {
@@ -182,7 +230,12 @@ void protobuf_AddDesc_protocol_2eproto() {
     "ogin_prompt\030\003 \001(\r\"\026\n\007ulogout\022\013\n\003uid\030\001 \002("
     "\r\"/\n\013ulogout_ack\022 \n\005error\030\001 \001(\0132\021.common"
     ".errorinfo\"6\n\022forced_offline_ntf\022 \n\005erro"
-    "r\030\001 \001(\0132\021.common.errorinfo", 386);
+    "r\030\001 \001(\0132\021.common.errorinfo\"\022\n\020QuotConfig"
+    "GetReq\"\275\001\n\020QuotConfigGetRes\022\"\n\007errinfo\030\001"
+    " \002(\0132\021.common.errorinfo\022\027\n\017supports_sear"
+    "ch\030\002 \001(\010\022\036\n\026supports_group_request\030\003 \001(\010"
+    "\022\035\n\025supported_resolutions\030\004 \001(\t\022\026\n\016suppo"
+    "rts_marks\030\005 \001(\010\022\025\n\rsupports_time\030\006 \001(\010", 598);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "protocol.proto", &protobuf_RegisterTypes);
   ulogin::default_instance_ = new ulogin();
@@ -190,11 +243,15 @@ void protobuf_AddDesc_protocol_2eproto() {
   ulogout::default_instance_ = new ulogout();
   ulogout_ack::default_instance_ = new ulogout_ack();
   forced_offline_ntf::default_instance_ = new forced_offline_ntf();
+  QuotConfigGetReq::default_instance_ = new QuotConfigGetReq();
+  QuotConfigGetRes::default_instance_ = new QuotConfigGetRes();
   ulogin::default_instance_->InitAsDefaultInstance();
   ulogin_ack::default_instance_->InitAsDefaultInstance();
   ulogout::default_instance_->InitAsDefaultInstance();
   ulogout_ack::default_instance_->InitAsDefaultInstance();
   forced_offline_ntf::default_instance_->InitAsDefaultInstance();
+  QuotConfigGetReq::default_instance_->InitAsDefaultInstance();
+  QuotConfigGetRes::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_protocol_2eproto);
 }
 
@@ -1622,6 +1679,632 @@ void forced_offline_ntf::Swap(forced_offline_ntf* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = forced_offline_ntf_descriptor_;
   metadata.reflection = forced_offline_ntf_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+#endif  // !_MSC_VER
+
+QuotConfigGetReq::QuotConfigGetReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:protocol.QuotConfigGetReq)
+}
+
+void QuotConfigGetReq::InitAsDefaultInstance() {
+}
+
+QuotConfigGetReq::QuotConfigGetReq(const QuotConfigGetReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:protocol.QuotConfigGetReq)
+}
+
+void QuotConfigGetReq::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+QuotConfigGetReq::~QuotConfigGetReq() {
+  // @@protoc_insertion_point(destructor:protocol.QuotConfigGetReq)
+  SharedDtor();
+}
+
+void QuotConfigGetReq::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void QuotConfigGetReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* QuotConfigGetReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return QuotConfigGetReq_descriptor_;
+}
+
+const QuotConfigGetReq& QuotConfigGetReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_protocol_2eproto();
+  return *default_instance_;
+}
+
+QuotConfigGetReq* QuotConfigGetReq::default_instance_ = NULL;
+
+QuotConfigGetReq* QuotConfigGetReq::New() const {
+  return new QuotConfigGetReq;
+}
+
+void QuotConfigGetReq::Clear() {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool QuotConfigGetReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:protocol.QuotConfigGetReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:protocol.QuotConfigGetReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:protocol.QuotConfigGetReq)
+  return false;
+#undef DO_
+}
+
+void QuotConfigGetReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:protocol.QuotConfigGetReq)
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:protocol.QuotConfigGetReq)
+}
+
+::google::protobuf::uint8* QuotConfigGetReq::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.QuotConfigGetReq)
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.QuotConfigGetReq)
+  return target;
+}
+
+int QuotConfigGetReq::ByteSize() const {
+  int total_size = 0;
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void QuotConfigGetReq::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const QuotConfigGetReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const QuotConfigGetReq*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void QuotConfigGetReq::MergeFrom(const QuotConfigGetReq& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void QuotConfigGetReq::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void QuotConfigGetReq::CopyFrom(const QuotConfigGetReq& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool QuotConfigGetReq::IsInitialized() const {
+
+  return true;
+}
+
+void QuotConfigGetReq::Swap(QuotConfigGetReq* other) {
+  if (other != this) {
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata QuotConfigGetReq::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = QuotConfigGetReq_descriptor_;
+  metadata.reflection = QuotConfigGetReq_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int QuotConfigGetRes::kErrinfoFieldNumber;
+const int QuotConfigGetRes::kSupportsSearchFieldNumber;
+const int QuotConfigGetRes::kSupportsGroupRequestFieldNumber;
+const int QuotConfigGetRes::kSupportedResolutionsFieldNumber;
+const int QuotConfigGetRes::kSupportsMarksFieldNumber;
+const int QuotConfigGetRes::kSupportsTimeFieldNumber;
+#endif  // !_MSC_VER
+
+QuotConfigGetRes::QuotConfigGetRes()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:protocol.QuotConfigGetRes)
+}
+
+void QuotConfigGetRes::InitAsDefaultInstance() {
+  errinfo_ = const_cast< ::common::errorinfo*>(&::common::errorinfo::default_instance());
+}
+
+QuotConfigGetRes::QuotConfigGetRes(const QuotConfigGetRes& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:protocol.QuotConfigGetRes)
+}
+
+void QuotConfigGetRes::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  errinfo_ = NULL;
+  supports_search_ = false;
+  supports_group_request_ = false;
+  supported_resolutions_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  supports_marks_ = false;
+  supports_time_ = false;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+QuotConfigGetRes::~QuotConfigGetRes() {
+  // @@protoc_insertion_point(destructor:protocol.QuotConfigGetRes)
+  SharedDtor();
+}
+
+void QuotConfigGetRes::SharedDtor() {
+  if (supported_resolutions_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete supported_resolutions_;
+  }
+  if (this != default_instance_) {
+    delete errinfo_;
+  }
+}
+
+void QuotConfigGetRes::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* QuotConfigGetRes::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return QuotConfigGetRes_descriptor_;
+}
+
+const QuotConfigGetRes& QuotConfigGetRes::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_protocol_2eproto();
+  return *default_instance_;
+}
+
+QuotConfigGetRes* QuotConfigGetRes::default_instance_ = NULL;
+
+QuotConfigGetRes* QuotConfigGetRes::New() const {
+  return new QuotConfigGetRes;
+}
+
+void QuotConfigGetRes::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<QuotConfigGetRes*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 63) {
+    ZR_(supports_search_, supports_time_);
+    if (has_errinfo()) {
+      if (errinfo_ != NULL) errinfo_->::common::errorinfo::Clear();
+    }
+    if (has_supported_resolutions()) {
+      if (supported_resolutions_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        supported_resolutions_->clear();
+      }
+    }
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool QuotConfigGetRes::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:protocol.QuotConfigGetRes)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .common.errorinfo errinfo = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_errinfo()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_supports_search;
+        break;
+      }
+
+      // optional bool supports_search = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_supports_search:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supports_search_)));
+          set_has_supports_search();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_supports_group_request;
+        break;
+      }
+
+      // optional bool supports_group_request = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_supports_group_request:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supports_group_request_)));
+          set_has_supports_group_request();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(34)) goto parse_supported_resolutions;
+        break;
+      }
+
+      // optional string supported_resolutions = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_supported_resolutions:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_supported_resolutions()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->supported_resolutions().data(), this->supported_resolutions().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "supported_resolutions");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(40)) goto parse_supports_marks;
+        break;
+      }
+
+      // optional bool supports_marks = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_supports_marks:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supports_marks_)));
+          set_has_supports_marks();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_supports_time;
+        break;
+      }
+
+      // optional bool supports_time = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_supports_time:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &supports_time_)));
+          set_has_supports_time();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:protocol.QuotConfigGetRes)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:protocol.QuotConfigGetRes)
+  return false;
+#undef DO_
+}
+
+void QuotConfigGetRes::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:protocol.QuotConfigGetRes)
+  // required .common.errorinfo errinfo = 1;
+  if (has_errinfo()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      1, this->errinfo(), output);
+  }
+
+  // optional bool supports_search = 2;
+  if (has_supports_search()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->supports_search(), output);
+  }
+
+  // optional bool supports_group_request = 3;
+  if (has_supports_group_request()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->supports_group_request(), output);
+  }
+
+  // optional string supported_resolutions = 4;
+  if (has_supported_resolutions()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->supported_resolutions().data(), this->supported_resolutions().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "supported_resolutions");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      4, this->supported_resolutions(), output);
+  }
+
+  // optional bool supports_marks = 5;
+  if (has_supports_marks()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(5, this->supports_marks(), output);
+  }
+
+  // optional bool supports_time = 6;
+  if (has_supports_time()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(6, this->supports_time(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:protocol.QuotConfigGetRes)
+}
+
+::google::protobuf::uint8* QuotConfigGetRes::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:protocol.QuotConfigGetRes)
+  // required .common.errorinfo errinfo = 1;
+  if (has_errinfo()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        1, this->errinfo(), target);
+  }
+
+  // optional bool supports_search = 2;
+  if (has_supports_search()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->supports_search(), target);
+  }
+
+  // optional bool supports_group_request = 3;
+  if (has_supports_group_request()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->supports_group_request(), target);
+  }
+
+  // optional string supported_resolutions = 4;
+  if (has_supported_resolutions()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->supported_resolutions().data(), this->supported_resolutions().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "supported_resolutions");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        4, this->supported_resolutions(), target);
+  }
+
+  // optional bool supports_marks = 5;
+  if (has_supports_marks()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(5, this->supports_marks(), target);
+  }
+
+  // optional bool supports_time = 6;
+  if (has_supports_time()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(6, this->supports_time(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:protocol.QuotConfigGetRes)
+  return target;
+}
+
+int QuotConfigGetRes::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .common.errorinfo errinfo = 1;
+    if (has_errinfo()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->errinfo());
+    }
+
+    // optional bool supports_search = 2;
+    if (has_supports_search()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool supports_group_request = 3;
+    if (has_supports_group_request()) {
+      total_size += 1 + 1;
+    }
+
+    // optional string supported_resolutions = 4;
+    if (has_supported_resolutions()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->supported_resolutions());
+    }
+
+    // optional bool supports_marks = 5;
+    if (has_supports_marks()) {
+      total_size += 1 + 1;
+    }
+
+    // optional bool supports_time = 6;
+    if (has_supports_time()) {
+      total_size += 1 + 1;
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void QuotConfigGetRes::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const QuotConfigGetRes* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const QuotConfigGetRes*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void QuotConfigGetRes::MergeFrom(const QuotConfigGetRes& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_errinfo()) {
+      mutable_errinfo()->::common::errorinfo::MergeFrom(from.errinfo());
+    }
+    if (from.has_supports_search()) {
+      set_supports_search(from.supports_search());
+    }
+    if (from.has_supports_group_request()) {
+      set_supports_group_request(from.supports_group_request());
+    }
+    if (from.has_supported_resolutions()) {
+      set_supported_resolutions(from.supported_resolutions());
+    }
+    if (from.has_supports_marks()) {
+      set_supports_marks(from.supports_marks());
+    }
+    if (from.has_supports_time()) {
+      set_supports_time(from.supports_time());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void QuotConfigGetRes::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void QuotConfigGetRes::CopyFrom(const QuotConfigGetRes& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool QuotConfigGetRes::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  if (has_errinfo()) {
+    if (!this->errinfo().IsInitialized()) return false;
+  }
+  return true;
+}
+
+void QuotConfigGetRes::Swap(QuotConfigGetRes* other) {
+  if (other != this) {
+    std::swap(errinfo_, other->errinfo_);
+    std::swap(supports_search_, other->supports_search_);
+    std::swap(supports_group_request_, other->supports_group_request_);
+    std::swap(supported_resolutions_, other->supported_resolutions_);
+    std::swap(supports_marks_, other->supports_marks_);
+    std::swap(supports_time_, other->supports_time_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata QuotConfigGetRes::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = QuotConfigGetRes_descriptor_;
+  metadata.reflection = QuotConfigGetRes_reflection_;
   return metadata;
 }
 

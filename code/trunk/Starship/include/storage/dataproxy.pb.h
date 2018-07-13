@@ -43,6 +43,7 @@ class MemOperate_DbOperate_OrderBy;
 class Record;
 class Field;
 class MemRsp;
+class MemRsp_DataLocate;
 
 enum MemOperate_RedisOperate_OPERATE_TYPE {
   MemOperate_RedisOperate_OPERATE_TYPE_T_READ = 1,
@@ -1332,6 +1333,115 @@ class Field : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class MemRsp_DataLocate : public ::google::protobuf::Message {
+ public:
+  MemRsp_DataLocate();
+  virtual ~MemRsp_DataLocate();
+
+  MemRsp_DataLocate(const MemRsp_DataLocate& from);
+
+  inline MemRsp_DataLocate& operator=(const MemRsp_DataLocate& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MemRsp_DataLocate& default_instance();
+
+  void Swap(MemRsp_DataLocate* other);
+
+  // implements Message ----------------------------------------------
+
+  MemRsp_DataLocate* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MemRsp_DataLocate& from);
+  void MergeFrom(const MemRsp_DataLocate& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 section_from = 1;
+  inline bool has_section_from() const;
+  inline void clear_section_from();
+  static const int kSectionFromFieldNumber = 1;
+  inline ::google::protobuf::uint32 section_from() const;
+  inline void set_section_from(::google::protobuf::uint32 value);
+
+  // required uint32 section_to = 2;
+  inline bool has_section_to() const;
+  inline void clear_section_to();
+  static const int kSectionToFieldNumber = 2;
+  inline ::google::protobuf::uint32 section_to() const;
+  inline void set_section_to(::google::protobuf::uint32 value);
+
+  // optional uint32 hash = 3;
+  inline bool has_hash() const;
+  inline void clear_hash();
+  static const int kHashFieldNumber = 3;
+  inline ::google::protobuf::uint32 hash() const;
+  inline void set_hash(::google::protobuf::uint32 value);
+
+  // optional uint32 divisor = 4;
+  inline bool has_divisor() const;
+  inline void clear_divisor();
+  static const int kDivisorFieldNumber = 4;
+  inline ::google::protobuf::uint32 divisor() const;
+  inline void set_divisor(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:DataMem.MemRsp.DataLocate)
+ private:
+  inline void set_has_section_from();
+  inline void clear_has_section_from();
+  inline void set_has_section_to();
+  inline void clear_has_section_to();
+  inline void set_has_hash();
+  inline void clear_has_hash();
+  inline void set_has_divisor();
+  inline void clear_has_divisor();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 section_from_;
+  ::google::protobuf::uint32 section_to_;
+  ::google::protobuf::uint32 hash_;
+  ::google::protobuf::uint32 divisor_;
+  friend void  protobuf_AddDesc_dataproxy_2eproto();
+  friend void protobuf_AssignDesc_dataproxy_2eproto();
+  friend void protobuf_ShutdownFile_dataproxy_2eproto();
+
+  void InitAsDefaultInstance();
+  static MemRsp_DataLocate* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class MemRsp : public ::google::protobuf::Message {
  public:
   MemRsp();
@@ -1382,6 +1492,8 @@ class MemRsp : public ::google::protobuf::Message {
   ::google::protobuf::Metadata GetMetadata() const;
 
   // nested types ----------------------------------------------------
+
+  typedef MemRsp_DataLocate DataLocate;
 
   typedef MemRsp_E_RESULT_FROM E_RESULT_FROM;
   static const E_RESULT_FROM FROM_REDIS = MemRsp_E_RESULT_FROM_FROM_REDIS;
@@ -1461,6 +1573,15 @@ class MemRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::int32 from() const;
   inline void set_from(::google::protobuf::int32 value);
 
+  // optional .DataMem.MemRsp.DataLocate locate = 7;
+  inline bool has_locate() const;
+  inline void clear_locate();
+  static const int kLocateFieldNumber = 7;
+  inline const ::DataMem::MemRsp_DataLocate& locate() const;
+  inline ::DataMem::MemRsp_DataLocate* mutable_locate();
+  inline ::DataMem::MemRsp_DataLocate* release_locate();
+  inline void set_allocated_locate(::DataMem::MemRsp_DataLocate* locate);
+
   // @@protoc_insertion_point(class_scope:DataMem.MemRsp)
  private:
   inline void set_has_err_no();
@@ -1473,6 +1594,8 @@ class MemRsp : public ::google::protobuf::Message {
   inline void clear_has_curcount();
   inline void set_has_from();
   inline void clear_has_from();
+  inline void set_has_locate();
+  inline void clear_has_locate();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1484,6 +1607,7 @@ class MemRsp : public ::google::protobuf::Message {
   ::google::protobuf::RepeatedPtrField< ::DataMem::Record > record_data_;
   ::google::protobuf::int32 curcount_;
   ::google::protobuf::int32 from_;
+  ::DataMem::MemRsp_DataLocate* locate_;
   friend void  protobuf_AddDesc_dataproxy_2eproto();
   friend void protobuf_AssignDesc_dataproxy_2eproto();
   friend void protobuf_ShutdownFile_dataproxy_2eproto();
@@ -3102,6 +3226,106 @@ inline void Field::set_allocated_col_as(::std::string* col_as) {
 
 // -------------------------------------------------------------------
 
+// MemRsp_DataLocate
+
+// required uint32 section_from = 1;
+inline bool MemRsp_DataLocate::has_section_from() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MemRsp_DataLocate::set_has_section_from() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MemRsp_DataLocate::clear_has_section_from() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MemRsp_DataLocate::clear_section_from() {
+  section_from_ = 0u;
+  clear_has_section_from();
+}
+inline ::google::protobuf::uint32 MemRsp_DataLocate::section_from() const {
+  // @@protoc_insertion_point(field_get:DataMem.MemRsp.DataLocate.section_from)
+  return section_from_;
+}
+inline void MemRsp_DataLocate::set_section_from(::google::protobuf::uint32 value) {
+  set_has_section_from();
+  section_from_ = value;
+  // @@protoc_insertion_point(field_set:DataMem.MemRsp.DataLocate.section_from)
+}
+
+// required uint32 section_to = 2;
+inline bool MemRsp_DataLocate::has_section_to() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MemRsp_DataLocate::set_has_section_to() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MemRsp_DataLocate::clear_has_section_to() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MemRsp_DataLocate::clear_section_to() {
+  section_to_ = 0u;
+  clear_has_section_to();
+}
+inline ::google::protobuf::uint32 MemRsp_DataLocate::section_to() const {
+  // @@protoc_insertion_point(field_get:DataMem.MemRsp.DataLocate.section_to)
+  return section_to_;
+}
+inline void MemRsp_DataLocate::set_section_to(::google::protobuf::uint32 value) {
+  set_has_section_to();
+  section_to_ = value;
+  // @@protoc_insertion_point(field_set:DataMem.MemRsp.DataLocate.section_to)
+}
+
+// optional uint32 hash = 3;
+inline bool MemRsp_DataLocate::has_hash() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void MemRsp_DataLocate::set_has_hash() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void MemRsp_DataLocate::clear_has_hash() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void MemRsp_DataLocate::clear_hash() {
+  hash_ = 0u;
+  clear_has_hash();
+}
+inline ::google::protobuf::uint32 MemRsp_DataLocate::hash() const {
+  // @@protoc_insertion_point(field_get:DataMem.MemRsp.DataLocate.hash)
+  return hash_;
+}
+inline void MemRsp_DataLocate::set_hash(::google::protobuf::uint32 value) {
+  set_has_hash();
+  hash_ = value;
+  // @@protoc_insertion_point(field_set:DataMem.MemRsp.DataLocate.hash)
+}
+
+// optional uint32 divisor = 4;
+inline bool MemRsp_DataLocate::has_divisor() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void MemRsp_DataLocate::set_has_divisor() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void MemRsp_DataLocate::clear_has_divisor() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void MemRsp_DataLocate::clear_divisor() {
+  divisor_ = 0u;
+  clear_has_divisor();
+}
+inline ::google::protobuf::uint32 MemRsp_DataLocate::divisor() const {
+  // @@protoc_insertion_point(field_get:DataMem.MemRsp.DataLocate.divisor)
+  return divisor_;
+}
+inline void MemRsp_DataLocate::set_divisor(::google::protobuf::uint32 value) {
+  set_has_divisor();
+  divisor_ = value;
+  // @@protoc_insertion_point(field_set:DataMem.MemRsp.DataLocate.divisor)
+}
+
+// -------------------------------------------------------------------
+
 // MemRsp
 
 // required int32 err_no = 1;
@@ -3304,6 +3528,47 @@ inline void MemRsp::set_from(::google::protobuf::int32 value) {
   set_has_from();
   from_ = value;
   // @@protoc_insertion_point(field_set:DataMem.MemRsp.from)
+}
+
+// optional .DataMem.MemRsp.DataLocate locate = 7;
+inline bool MemRsp::has_locate() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void MemRsp::set_has_locate() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void MemRsp::clear_has_locate() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void MemRsp::clear_locate() {
+  if (locate_ != NULL) locate_->::DataMem::MemRsp_DataLocate::Clear();
+  clear_has_locate();
+}
+inline const ::DataMem::MemRsp_DataLocate& MemRsp::locate() const {
+  // @@protoc_insertion_point(field_get:DataMem.MemRsp.locate)
+  return locate_ != NULL ? *locate_ : *default_instance_->locate_;
+}
+inline ::DataMem::MemRsp_DataLocate* MemRsp::mutable_locate() {
+  set_has_locate();
+  if (locate_ == NULL) locate_ = new ::DataMem::MemRsp_DataLocate;
+  // @@protoc_insertion_point(field_mutable:DataMem.MemRsp.locate)
+  return locate_;
+}
+inline ::DataMem::MemRsp_DataLocate* MemRsp::release_locate() {
+  clear_has_locate();
+  ::DataMem::MemRsp_DataLocate* temp = locate_;
+  locate_ = NULL;
+  return temp;
+}
+inline void MemRsp::set_allocated_locate(::DataMem::MemRsp_DataLocate* locate) {
+  delete locate_;
+  locate_ = locate;
+  if (locate) {
+    set_has_locate();
+  } else {
+    clear_has_locate();
+  }
+  // @@protoc_insertion_point(field_set_allocated:DataMem.MemRsp.locate)
 }
 
 

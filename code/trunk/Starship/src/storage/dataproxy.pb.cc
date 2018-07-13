@@ -52,6 +52,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* MemRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   MemRsp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* MemRsp_DataLocate_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  MemRsp_DataLocate_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* MemRsp_E_RESULT_FROM_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* E_COL_TYPE_descriptor_ = NULL;
 
@@ -218,13 +221,14 @@ void protobuf_AssignDesc_dataproxy_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Field));
   MemRsp_descriptor_ = file->message_type(3);
-  static const int MemRsp_offsets_[6] = {
+  static const int MemRsp_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, err_no_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, err_msg_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, totalcount_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, curcount_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, record_data_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, from_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp, locate_),
   };
   MemRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -237,6 +241,24 @@ void protobuf_AssignDesc_dataproxy_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(MemRsp));
+  MemRsp_DataLocate_descriptor_ = MemRsp_descriptor_->nested_type(0);
+  static const int MemRsp_DataLocate_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp_DataLocate, section_from_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp_DataLocate, section_to_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp_DataLocate, hash_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp_DataLocate, divisor_),
+  };
+  MemRsp_DataLocate_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      MemRsp_DataLocate_descriptor_,
+      MemRsp_DataLocate::default_instance_,
+      MemRsp_DataLocate_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp_DataLocate, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(MemRsp_DataLocate, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(MemRsp_DataLocate));
   MemRsp_E_RESULT_FROM_descriptor_ = MemRsp_descriptor_->enum_type(0);
   E_COL_TYPE_descriptor_ = file->enum_type(0);
 }
@@ -269,6 +291,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     Field_descriptor_, &Field::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     MemRsp_descriptor_, &MemRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    MemRsp_DataLocate_descriptor_, &MemRsp_DataLocate::default_instance());
 }
 
 }  // namespace
@@ -292,6 +316,8 @@ void protobuf_ShutdownFile_dataproxy_2eproto() {
   delete Field_reflection_;
   delete MemRsp::default_instance_;
   delete MemRsp_reflection_;
+  delete MemRsp_DataLocate::default_instance_;
+  delete MemRsp_DataLocate_reflection_;
 }
 
 void protobuf_AddDesc_dataproxy_2eproto() {
@@ -343,14 +369,17 @@ void protobuf_AddDesc_dataproxy_2eproto() {
     "LETE\020\005\",\n\006Record\022\"\n\nfield_info\030\001 \003(\0132\016.D"
     "ataMem.Field\"c\n\005Field\022\020\n\010col_name\030\001 \001(\t\022"
     "%\n\010col_type\030\002 \001(\0162\023.DataMem.E_COL_TYPE\022\021"
-    "\n\tcol_value\030\003 \001(\014\022\016\n\006col_as\030\004 \001(\t\"\261\001\n\006Me"
+    "\n\tcol_value\030\003 \001(\014\022\016\n\006col_as\030\004 \001(\t\"\264\002\n\006Me"
     "mRsp\022\016\n\006err_no\030\001 \002(\005\022\017\n\007err_msg\030\002 \001(\014\022\022\n"
     "\ntotalcount\030\003 \001(\005\022\020\n\010curcount\030\004 \001(\005\022$\n\013r"
     "ecord_data\030\005 \003(\0132\017.DataMem.Record\022\014\n\004fro"
-    "m\030\006 \001(\005\",\n\rE_RESULT_FROM\022\016\n\nFROM_REDIS\020\001"
-    "\022\013\n\007FROM_DB\020\002*D\n\nE_COL_TYPE\022\n\n\006STRING\020\000\022"
-    "\007\n\003INT\020\001\022\n\n\006BIGINT\020\002\022\t\n\005FLOAT\020\003\022\n\n\006DOUBL"
-    "E\020\004", 1963);
+    "m\030\006 \001(\005\022*\n\006locate\030\007 \001(\0132\032.DataMem.MemRsp"
+    ".DataLocate\032U\n\nDataLocate\022\024\n\014section_fro"
+    "m\030\001 \002(\r\022\022\n\nsection_to\030\002 \002(\r\022\014\n\004hash\030\003 \001("
+    "\r\022\017\n\007divisor\030\004 \001(\r\",\n\rE_RESULT_FROM\022\016\n\nF"
+    "ROM_REDIS\020\001\022\013\n\007FROM_DB\020\002*D\n\nE_COL_TYPE\022\n"
+    "\n\006STRING\020\000\022\007\n\003INT\020\001\022\n\n\006BIGINT\020\002\022\t\n\005FLOAT"
+    "\020\003\022\n\n\006DOUBLE\020\004", 2094);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "dataproxy.proto", &protobuf_RegisterTypes);
   MemOperate::default_instance_ = new MemOperate();
@@ -362,6 +391,7 @@ void protobuf_AddDesc_dataproxy_2eproto() {
   Record::default_instance_ = new Record();
   Field::default_instance_ = new Field();
   MemRsp::default_instance_ = new MemRsp();
+  MemRsp_DataLocate::default_instance_ = new MemRsp_DataLocate();
   MemOperate::default_instance_->InitAsDefaultInstance();
   MemOperate_RedisOperate::default_instance_->InitAsDefaultInstance();
   MemOperate_DbOperate::default_instance_->InitAsDefaultInstance();
@@ -371,6 +401,7 @@ void protobuf_AddDesc_dataproxy_2eproto() {
   Record::default_instance_->InitAsDefaultInstance();
   Field::default_instance_->InitAsDefaultInstance();
   MemRsp::default_instance_->InitAsDefaultInstance();
+  MemRsp_DataLocate::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_dataproxy_2eproto);
 }
 
@@ -3740,12 +3771,364 @@ const MemRsp_E_RESULT_FROM MemRsp::E_RESULT_FROM_MAX;
 const int MemRsp::E_RESULT_FROM_ARRAYSIZE;
 #endif  // _MSC_VER
 #ifndef _MSC_VER
+const int MemRsp_DataLocate::kSectionFromFieldNumber;
+const int MemRsp_DataLocate::kSectionToFieldNumber;
+const int MemRsp_DataLocate::kHashFieldNumber;
+const int MemRsp_DataLocate::kDivisorFieldNumber;
+#endif  // !_MSC_VER
+
+MemRsp_DataLocate::MemRsp_DataLocate()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:DataMem.MemRsp.DataLocate)
+}
+
+void MemRsp_DataLocate::InitAsDefaultInstance() {
+}
+
+MemRsp_DataLocate::MemRsp_DataLocate(const MemRsp_DataLocate& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:DataMem.MemRsp.DataLocate)
+}
+
+void MemRsp_DataLocate::SharedCtor() {
+  _cached_size_ = 0;
+  section_from_ = 0u;
+  section_to_ = 0u;
+  hash_ = 0u;
+  divisor_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+MemRsp_DataLocate::~MemRsp_DataLocate() {
+  // @@protoc_insertion_point(destructor:DataMem.MemRsp.DataLocate)
+  SharedDtor();
+}
+
+void MemRsp_DataLocate::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void MemRsp_DataLocate::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* MemRsp_DataLocate::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return MemRsp_DataLocate_descriptor_;
+}
+
+const MemRsp_DataLocate& MemRsp_DataLocate::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_dataproxy_2eproto();
+  return *default_instance_;
+}
+
+MemRsp_DataLocate* MemRsp_DataLocate::default_instance_ = NULL;
+
+MemRsp_DataLocate* MemRsp_DataLocate::New() const {
+  return new MemRsp_DataLocate;
+}
+
+void MemRsp_DataLocate::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<MemRsp_DataLocate*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  ZR_(section_from_, divisor_);
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool MemRsp_DataLocate::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:DataMem.MemRsp.DataLocate)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 section_from = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &section_from_)));
+          set_has_section_from();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_section_to;
+        break;
+      }
+
+      // required uint32 section_to = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_section_to:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &section_to_)));
+          set_has_section_to();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_hash;
+        break;
+      }
+
+      // optional uint32 hash = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_hash:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &hash_)));
+          set_has_hash();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_divisor;
+        break;
+      }
+
+      // optional uint32 divisor = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_divisor:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &divisor_)));
+          set_has_divisor();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:DataMem.MemRsp.DataLocate)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:DataMem.MemRsp.DataLocate)
+  return false;
+#undef DO_
+}
+
+void MemRsp_DataLocate::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:DataMem.MemRsp.DataLocate)
+  // required uint32 section_from = 1;
+  if (has_section_from()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->section_from(), output);
+  }
+
+  // required uint32 section_to = 2;
+  if (has_section_to()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->section_to(), output);
+  }
+
+  // optional uint32 hash = 3;
+  if (has_hash()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->hash(), output);
+  }
+
+  // optional uint32 divisor = 4;
+  if (has_divisor()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->divisor(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:DataMem.MemRsp.DataLocate)
+}
+
+::google::protobuf::uint8* MemRsp_DataLocate::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:DataMem.MemRsp.DataLocate)
+  // required uint32 section_from = 1;
+  if (has_section_from()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->section_from(), target);
+  }
+
+  // required uint32 section_to = 2;
+  if (has_section_to()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->section_to(), target);
+  }
+
+  // optional uint32 hash = 3;
+  if (has_hash()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->hash(), target);
+  }
+
+  // optional uint32 divisor = 4;
+  if (has_divisor()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->divisor(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:DataMem.MemRsp.DataLocate)
+  return target;
+}
+
+int MemRsp_DataLocate::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 section_from = 1;
+    if (has_section_from()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->section_from());
+    }
+
+    // required uint32 section_to = 2;
+    if (has_section_to()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->section_to());
+    }
+
+    // optional uint32 hash = 3;
+    if (has_hash()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->hash());
+    }
+
+    // optional uint32 divisor = 4;
+    if (has_divisor()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->divisor());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void MemRsp_DataLocate::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const MemRsp_DataLocate* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const MemRsp_DataLocate*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void MemRsp_DataLocate::MergeFrom(const MemRsp_DataLocate& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_section_from()) {
+      set_section_from(from.section_from());
+    }
+    if (from.has_section_to()) {
+      set_section_to(from.section_to());
+    }
+    if (from.has_hash()) {
+      set_hash(from.hash());
+    }
+    if (from.has_divisor()) {
+      set_divisor(from.divisor());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void MemRsp_DataLocate::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void MemRsp_DataLocate::CopyFrom(const MemRsp_DataLocate& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool MemRsp_DataLocate::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void MemRsp_DataLocate::Swap(MemRsp_DataLocate* other) {
+  if (other != this) {
+    std::swap(section_from_, other->section_from_);
+    std::swap(section_to_, other->section_to_);
+    std::swap(hash_, other->hash_);
+    std::swap(divisor_, other->divisor_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata MemRsp_DataLocate::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = MemRsp_DataLocate_descriptor_;
+  metadata.reflection = MemRsp_DataLocate_reflection_;
+  return metadata;
+}
+
+
+// -------------------------------------------------------------------
+
+#ifndef _MSC_VER
 const int MemRsp::kErrNoFieldNumber;
 const int MemRsp::kErrMsgFieldNumber;
 const int MemRsp::kTotalcountFieldNumber;
 const int MemRsp::kCurcountFieldNumber;
 const int MemRsp::kRecordDataFieldNumber;
 const int MemRsp::kFromFieldNumber;
+const int MemRsp::kLocateFieldNumber;
 #endif  // !_MSC_VER
 
 MemRsp::MemRsp()
@@ -3755,6 +4138,7 @@ MemRsp::MemRsp()
 }
 
 void MemRsp::InitAsDefaultInstance() {
+  locate_ = const_cast< ::DataMem::MemRsp_DataLocate*>(&::DataMem::MemRsp_DataLocate::default_instance());
 }
 
 MemRsp::MemRsp(const MemRsp& from)
@@ -3772,6 +4156,7 @@ void MemRsp::SharedCtor() {
   totalcount_ = 0;
   curcount_ = 0;
   from_ = 0;
+  locate_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -3785,6 +4170,7 @@ void MemRsp::SharedDtor() {
     delete err_msg_;
   }
   if (this != default_instance_) {
+    delete locate_;
   }
 }
 
@@ -3820,13 +4206,16 @@ void MemRsp::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 47) {
+  if (_has_bits_[0 / 32] & 111) {
     ZR_(err_no_, totalcount_);
     ZR_(curcount_, from_);
     if (has_err_msg()) {
       if (err_msg_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         err_msg_->clear();
       }
+    }
+    if (has_locate()) {
+      if (locate_ != NULL) locate_->::DataMem::MemRsp_DataLocate::Clear();
     }
   }
 
@@ -3930,6 +4319,19 @@ bool MemRsp::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(58)) goto parse_locate;
+        break;
+      }
+
+      // optional .DataMem.MemRsp.DataLocate locate = 7;
+      case 7: {
+        if (tag == 58) {
+         parse_locate:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_locate()));
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -3991,6 +4393,12 @@ void MemRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->from(), output);
   }
 
+  // optional .DataMem.MemRsp.DataLocate locate = 7;
+  if (has_locate()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      7, this->locate(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -4033,6 +4441,13 @@ void MemRsp::SerializeWithCachedSizes(
   // optional int32 from = 6;
   if (has_from()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->from(), target);
+  }
+
+  // optional .DataMem.MemRsp.DataLocate locate = 7;
+  if (has_locate()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        7, this->locate(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -4080,6 +4495,13 @@ int MemRsp::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->from());
+    }
+
+    // optional .DataMem.MemRsp.DataLocate locate = 7;
+    if (has_locate()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->locate());
     }
 
   }
@@ -4133,6 +4555,9 @@ void MemRsp::MergeFrom(const MemRsp& from) {
     if (from.has_from()) {
       set_from(from.from());
     }
+    if (from.has_locate()) {
+      mutable_locate()->::DataMem::MemRsp_DataLocate::MergeFrom(from.locate());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -4152,6 +4577,9 @@ void MemRsp::CopyFrom(const MemRsp& from) {
 bool MemRsp::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
+  if (has_locate()) {
+    if (!this->locate().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -4163,6 +4591,7 @@ void MemRsp::Swap(MemRsp* other) {
     std::swap(curcount_, other->curcount_);
     record_data_.Swap(&other->record_data_);
     std::swap(from_, other->from_);
+    std::swap(locate_, other->locate_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

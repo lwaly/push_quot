@@ -19,6 +19,10 @@ Step::Step(Step* pNextStep)
       m_pLabor(0), m_pLogger(0), m_pTimeoutWatcher(0), m_pNextStep(pNextStep)
 {
     AddNextStepSeq(pNextStep);
+	m_uiImid = 0;
+	m_uiGroupId = 0;
+	m_uiCmd = 0;
+	m_strPublicLog = "";//统一输出日志数据
 }
 
 Step::Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const MsgBody& oReqMsgBody, Step* pNextStep)
@@ -27,6 +31,10 @@ Step::Step(const tagMsgShell& stReqMsgShell, const MsgHead& oReqMsgHead, const M
       m_pLabor(0), m_pLogger(0), m_pTimeoutWatcher(0), m_pNextStep(pNextStep)
 {
     AddNextStepSeq(pNextStep);
+	m_uiImid = 0;
+	m_uiGroupId = 0;
+	m_uiCmd = 0;
+	m_strPublicLog = "";//统一输出日志数据
 }
 
 Step::~Step()
@@ -48,11 +56,19 @@ Step::~Step()
             m_pNextStep = NULL;
         }
     }
+    m_setNextStepSeq.clear();
+    m_setPreStepSeq.clear();
 }
 
 bool Step::RegisterCallback(Step* pStep, ev_tstamp dTimeout)
 {
-    return(m_pLabor->RegisterCallback(GetSequence(), pStep, dTimeout));
+    bool bRegisterResult = false;
+    bRegisterResult = m_pLabor->RegisterCallback(GetSequence(), pStep, dTimeout);
+    if (bRegisterResult && (m_pNextStep == pStep))
+    {
+        m_setNextStepSeq.insert(pStep->GetSequence());
+    }
+    return(bRegisterResult);
 }
 
 void Step::DeleteCallback(Step* pStep)
@@ -74,6 +90,11 @@ bool Step::RegisterCallback(Session* pSession)
 void Step::DeleteCallback(Session* pSession)
 {
     return(m_pLabor->DeleteCallback(pSession));
+}
+
+const std::string& Step::GetWorkPath() const
+{
+    return(m_pLabor->GetWorkPath());
 }
 
 uint32 Step::GetNodeId()
@@ -101,6 +122,16 @@ const std::string& Step::GetWorkerIdentify()
 const std::string& Step::GetNodeType() const
 {
     return(m_pLabor->GetNodeType());
+}
+
+const loss::CJsonObject& Step::GetCustomConf() const
+{
+    return(m_pLabor->GetCustomConf());
+}
+
+time_t Step::GetNowTime() const
+{
+    return(m_pLabor->GetNowTime());
 }
 
 Session* Step::GetSession(uint32 uiSessionId, const std::string& strSessionClass)
@@ -153,6 +184,12 @@ bool Step::NextStep(Step* pNextStep, int iErrno, const std::string& strErrMsg, c
 {
     if (pNextStep)
     {
+		//设置公共的日志数据
+		if (GetPublicLog()!="")
+		{
+			pNextStep->SetPublicLog(GetPublicLog());
+		}
+
         if (!pNextStep->IsRegistered())
         {
             for (int i = 0; i < 3; ++i)
@@ -180,7 +217,7 @@ bool Step::NextStep(int iErrno, const std::string& strErrMsg, const std::string&
     for (std::set<uint32>::iterator seq_iter = m_setNextStepSeq.begin();
                     seq_iter != m_setNextStepSeq.end(); ++seq_iter)
     {
-        GetLabor()->ExecStep(GetSequence(), *seq_iter, iErrno, strErrMsg, strErrClientShow);
+        m_pLabor->ExecStep(GetSequence(), *seq_iter, iErrno, strErrMsg, strErrClientShow);
     }
     if (m_setNextStepSeq.size() > 0)
     {
@@ -190,6 +227,12 @@ bool Step::NextStep(int iErrno, const std::string& strErrMsg, const std::string&
     LOG4_TRACE("m_pNextStep 0x%x", m_pNextStep);
     if (m_pNextStep)
     {
+		//设置公共的日志数据
+		if (GetPublicLog()!="")
+		{
+			m_pNextStep->SetPublicLog(GetPublicLog());
+		}
+
         if (!m_pNextStep->IsRegistered())
         {
             for (int i = 0; i < 3; ++i)
@@ -244,7 +287,7 @@ void Step::DelayTimeout()
 {
     if (IsRegistered())
     {
-        GetLabor()->ResetTimeout(this, m_pTimeoutWatcher);
+        m_pLabor->ResetTimeout(this, m_pTimeoutWatcher);
     }
     else
     {
@@ -286,22 +329,22 @@ void Step::DelRedisNodeConf(const std::string strNodeType, const std::string str
 
 bool Step::AddRedisContextAddr(const std::string& strHost, int iPort, redisAsyncContext* ctx)
 {
-    return(GetLabor()->AddRedisContextAddr(strHost, iPort, ctx));
+    return(m_pLabor->AddRedisContextAddr(strHost, iPort, ctx));
 }
 
 void Step::DelRedisContextAddr(const redisAsyncContext* ctx)
 {
-    GetLabor()->DelRedisContextAddr(ctx);
+    m_pLabor->DelRedisContextAddr(ctx);
 }
 
 bool Step::RegisterCallback(const std::string& strIdentify, RedisStep* pRedisStep)
 {
-    return(GetLabor()->RegisterCallback(strIdentify, pRedisStep));
+    return(m_pLabor->RegisterCallback(strIdentify, pRedisStep));
 }
 
 bool Step::RegisterCallback(const std::string& strHost, int iPort, RedisStep* pRedisStep)
 {
-    return(GetLabor()->RegisterCallback(strHost, iPort, pRedisStep));
+    return(m_pLabor->RegisterCallback(strHost, iPort, pRedisStep));
 }
 
 void Step::AddNextStepSeq(Step* pStep)

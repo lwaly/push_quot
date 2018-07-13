@@ -33,9 +33,9 @@ E_CODEC_STATUS ClientMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
     stClientMsgHead.body_len = htonl((unsigned int)oMsgHead.msgbody_len());
     stClientMsgHead.seq = htonl(oMsgHead.seq());
     //stClientMsgHead.checksum = htons((unsigned short)stClientMsgHead.checksum);
-    if (oMsgBody.ByteSize() > 1000000) // pb 最大限制
+    if (oMsgBody.ByteSize() > 64000000) // pb 最大限制
     {
-        LOG4_ERROR("oMsgBody.ByteSize() > 1000000");
+        LOG4_ERROR("oMsgBody.ByteSize() > 64000000");
         return(CODEC_STATUS_ERR);
     }
     int iErrno = 0;
@@ -53,7 +53,7 @@ E_CODEC_STATUS ClientMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
             pBuff->SetWriteIndex(pBuff->GetWriteIndex() - iHadWriteLen);
             return(CODEC_STATUS_ERR);
         }
-        pBuff->Compact(8192);
+//        pBuff->Compact(8192);
         return(CODEC_STATUS_OK);
     }
     iHadWriteLen += iWriteLen;
@@ -181,7 +181,7 @@ E_CODEC_STATUS ClientMsgCodec::Encode(const MsgHead& oMsgHead, const MsgBody& oM
         }
     }
     LOG4_TRACE("oMsgBody.ByteSize() = %d, iWriteLen = %d(compress or encrypt maybe)", oMsgBody.ByteSize(), iWriteLen);
-    pBuff->Compact(8192);
+//    pBuff->Compact(8192);
     return(CODEC_STATUS_OK);
 }
 
@@ -206,7 +206,7 @@ E_CODEC_STATUS ClientMsgCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, M
         oMsgHead.set_seq(stClientMsgHead.seq);
         if (0 == stClientMsgHead.body_len)      // 心跳包无包体
         {
-            pBuff->Compact(8192);
+//            pBuff->Compact(8192);
             return(CODEC_STATUS_OK);
         }
         if (pBuff->ReadableBytes() >= stClientMsgHead.body_len)
@@ -291,7 +291,7 @@ E_CODEC_STATUS ClientMsgCodec::Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, M
             if (bResult)
             {
                 pBuff->SkipBytes(oMsgBody.ByteSize());
-                pBuff->Compact(8192);
+//                pBuff->Compact(8192);
                 return(CODEC_STATUS_OK);
             }
             else

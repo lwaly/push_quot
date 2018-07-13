@@ -96,7 +96,14 @@ public:     // Labor相关设置（由Cmd类或Step类调用这些方法完成La
     virtual bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody) = 0;
 
     // TODO virtual bool AutoHttp(const std::string& strHost, int iPort, const HttpMsg& oHttpMsg);
-
+    /**
+     * @brief 发送给父进程
+     * @note 返回ture只标识这个动作发起成功，不代表数据已发送成功。
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否已发送
+     */
+    virtual bool SendToParent(const MsgHead& oMsgHead,const MsgBody& oMsgBody) = 0;
     /**
      * @brief 自动连接并执行redis命令
      * @param strHost redis服务所在IP
@@ -128,6 +135,15 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     virtual uint32 GetSequence()
     {
         return(0);
+    }
+
+    /**
+     * @brief 获取工作目录
+     * @return 工作目录
+     */
+    virtual const std::string& GetWorkPath() const
+    {
+        return(m_strNodeTypeTmp);
     }
 
     /**
@@ -197,6 +213,17 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
     virtual bool IoTimeout(struct ev_timer* watcher, bool bCheckBeat = true)
     {
         return(false);
+    }
+
+    /**
+     * @brief 获取当前时间
+     * @note 获取当前时间，比time(NULL)速度快消耗小，不过没有time(NULL)精准，如果对时间精度
+     * 要求不是特别高，建议调用GetNowTime()替代time(NULL)
+     * @return 当前时间
+     */
+    virtual time_t GetNowTime() const
+    {
+        return(time(NULL));
     }
 
     /**
@@ -474,6 +501,11 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
         return(false);
     }
 
+	virtual bool GetClientData(const tagMsgShell& stMsgShell, loss::CBuffer* pBuff)
+	{
+		return(false);
+	}
+
     virtual std::string GetClientAddr(const tagMsgShell& stMsgShell)
     {
         return("");
@@ -539,6 +571,19 @@ public:     // Worker相关设置（由Cmd类或Step类调用这些方法完成�
      * @return 是否发送成功
      */
     virtual bool SendToWithMod(const std::string& strNodeType, unsigned int uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
+    {
+        return(false);
+    }
+
+    /**
+     * @brief 发送到一种类型的节点
+     * @note 发送到同一种类型除当前节点之外的所有节点。
+     * @param strNodeType 节点类型
+     * @param oMsgHead 数据包头
+     * @param oMsgBody 数据包体
+     * @return 是否发送成功
+     */
+    virtual bool SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody)
     {
         return(false);
     }

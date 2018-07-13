@@ -10,6 +10,7 @@
 #ifndef SRC_CODEC_STARSHIPCODEC_HPP_
 #define SRC_CODEC_STARSHIPCODEC_HPP_
 
+#include <arpa/inet.h>
 #include <zlib.h>
 #include <zconf.h>
 
@@ -19,6 +20,7 @@
 #include "protocol/msg.pb.h"
 #include "OssDefine.hpp"
 #include "cmd/CW.hpp"
+#include "labor/duty/Attribution.hpp"
 
 namespace oss
 {
@@ -65,6 +67,24 @@ public:
      */
     virtual E_CODEC_STATUS Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody) = 0;
 
+	    /**
+     * @brief 字节流编码
+     * @param[in] oMsgHead  消息包头
+     * @param[in] oMsgBody  消息包体
+     * @param[out] pBuff  数据缓冲区
+     * @return 编解码状态
+     */
+	virtual E_CODEC_STATUS Encode(const MsgHead& oMsgHead, const MsgBody& oMsgBody, loss::CBuffer* pBuff,tagConnectionAttr* pConnAttr){return Encode(oMsgHead,oMsgBody,pBuff);}
+
+    /**
+     * @brief 字节流解码
+     * @param[in,out] pBuff 数据缓冲区
+     * @param[out] oMsgHead 消息包头
+     * @param[out] oMsgBody 消息包体
+     * @return 编解码状态
+     */
+	virtual E_CODEC_STATUS Decode(loss::CBuffer* pBuff, MsgHead& oMsgHead, MsgBody& oMsgBody,tagConnectionAttr* pConnAttr){return Decode(pBuff,oMsgHead,oMsgBody);}
+
 
 protected:
     log4cplus::Logger GetLogger()
@@ -83,8 +103,13 @@ protected:
     bool Gunzip(const std::string& strSrc, std::string& strDest);
     bool Rc5Encrypt(const std::string& strSrc, std::string& strDest);
     bool Rc5Decrypt(const std::string& strSrc, std::string& strDest);
+	bool Rc5Encrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest);
+	bool Rc5Decrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest);
+
     bool AesEncrypt(const std::string& strSrc, std::string& strDest);
     bool AesDecrypt(const std::string& strSrc, std::string& strDest);
+	bool AesEncrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest);
+	bool AesDecrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest);
 
 public:
     void SetLogger(log4cplus::Logger logger)

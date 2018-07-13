@@ -39,6 +39,8 @@ class ulogin_ack;
 class ulogout;
 class ulogout_ack;
 class forced_offline_ntf;
+class QuotConfigGetReq;
+class QuotConfigGetRes;
 
 // ===================================================================
 
@@ -517,6 +519,211 @@ class forced_offline_ntf : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static forced_offline_ntf* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class QuotConfigGetReq : public ::google::protobuf::Message {
+ public:
+  QuotConfigGetReq();
+  virtual ~QuotConfigGetReq();
+
+  QuotConfigGetReq(const QuotConfigGetReq& from);
+
+  inline QuotConfigGetReq& operator=(const QuotConfigGetReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const QuotConfigGetReq& default_instance();
+
+  void Swap(QuotConfigGetReq* other);
+
+  // implements Message ----------------------------------------------
+
+  QuotConfigGetReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const QuotConfigGetReq& from);
+  void MergeFrom(const QuotConfigGetReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:protocol.QuotConfigGetReq)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_protocol_2eproto();
+  friend void protobuf_AssignDesc_protocol_2eproto();
+  friend void protobuf_ShutdownFile_protocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static QuotConfigGetReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class QuotConfigGetRes : public ::google::protobuf::Message {
+ public:
+  QuotConfigGetRes();
+  virtual ~QuotConfigGetRes();
+
+  QuotConfigGetRes(const QuotConfigGetRes& from);
+
+  inline QuotConfigGetRes& operator=(const QuotConfigGetRes& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const QuotConfigGetRes& default_instance();
+
+  void Swap(QuotConfigGetRes* other);
+
+  // implements Message ----------------------------------------------
+
+  QuotConfigGetRes* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const QuotConfigGetRes& from);
+  void MergeFrom(const QuotConfigGetRes& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .common.errorinfo errinfo = 1;
+  inline bool has_errinfo() const;
+  inline void clear_errinfo();
+  static const int kErrinfoFieldNumber = 1;
+  inline const ::common::errorinfo& errinfo() const;
+  inline ::common::errorinfo* mutable_errinfo();
+  inline ::common::errorinfo* release_errinfo();
+  inline void set_allocated_errinfo(::common::errorinfo* errinfo);
+
+  // optional bool supports_search = 2;
+  inline bool has_supports_search() const;
+  inline void clear_supports_search();
+  static const int kSupportsSearchFieldNumber = 2;
+  inline bool supports_search() const;
+  inline void set_supports_search(bool value);
+
+  // optional bool supports_group_request = 3;
+  inline bool has_supports_group_request() const;
+  inline void clear_supports_group_request();
+  static const int kSupportsGroupRequestFieldNumber = 3;
+  inline bool supports_group_request() const;
+  inline void set_supports_group_request(bool value);
+
+  // optional string supported_resolutions = 4;
+  inline bool has_supported_resolutions() const;
+  inline void clear_supported_resolutions();
+  static const int kSupportedResolutionsFieldNumber = 4;
+  inline const ::std::string& supported_resolutions() const;
+  inline void set_supported_resolutions(const ::std::string& value);
+  inline void set_supported_resolutions(const char* value);
+  inline void set_supported_resolutions(const char* value, size_t size);
+  inline ::std::string* mutable_supported_resolutions();
+  inline ::std::string* release_supported_resolutions();
+  inline void set_allocated_supported_resolutions(::std::string* supported_resolutions);
+
+  // optional bool supports_marks = 5;
+  inline bool has_supports_marks() const;
+  inline void clear_supports_marks();
+  static const int kSupportsMarksFieldNumber = 5;
+  inline bool supports_marks() const;
+  inline void set_supports_marks(bool value);
+
+  // optional bool supports_time = 6;
+  inline bool has_supports_time() const;
+  inline void clear_supports_time();
+  static const int kSupportsTimeFieldNumber = 6;
+  inline bool supports_time() const;
+  inline void set_supports_time(bool value);
+
+  // @@protoc_insertion_point(class_scope:protocol.QuotConfigGetRes)
+ private:
+  inline void set_has_errinfo();
+  inline void clear_has_errinfo();
+  inline void set_has_supports_search();
+  inline void clear_has_supports_search();
+  inline void set_has_supports_group_request();
+  inline void clear_has_supports_group_request();
+  inline void set_has_supported_resolutions();
+  inline void clear_has_supported_resolutions();
+  inline void set_has_supports_marks();
+  inline void clear_has_supports_marks();
+  inline void set_has_supports_time();
+  inline void clear_has_supports_time();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::common::errorinfo* errinfo_;
+  ::std::string* supported_resolutions_;
+  bool supports_search_;
+  bool supports_group_request_;
+  bool supports_marks_;
+  bool supports_time_;
+  friend void  protobuf_AddDesc_protocol_2eproto();
+  friend void protobuf_AssignDesc_protocol_2eproto();
+  friend void protobuf_ShutdownFile_protocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static QuotConfigGetRes* default_instance_;
 };
 // ===================================================================
 
@@ -1027,6 +1234,227 @@ inline void forced_offline_ntf::set_allocated_error(::common::errorinfo* error) 
     clear_has_error();
   }
   // @@protoc_insertion_point(field_set_allocated:protocol.forced_offline_ntf.error)
+}
+
+// -------------------------------------------------------------------
+
+// QuotConfigGetReq
+
+// -------------------------------------------------------------------
+
+// QuotConfigGetRes
+
+// required .common.errorinfo errinfo = 1;
+inline bool QuotConfigGetRes::has_errinfo() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void QuotConfigGetRes::set_has_errinfo() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void QuotConfigGetRes::clear_has_errinfo() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void QuotConfigGetRes::clear_errinfo() {
+  if (errinfo_ != NULL) errinfo_->::common::errorinfo::Clear();
+  clear_has_errinfo();
+}
+inline const ::common::errorinfo& QuotConfigGetRes::errinfo() const {
+  // @@protoc_insertion_point(field_get:protocol.QuotConfigGetRes.errinfo)
+  return errinfo_ != NULL ? *errinfo_ : *default_instance_->errinfo_;
+}
+inline ::common::errorinfo* QuotConfigGetRes::mutable_errinfo() {
+  set_has_errinfo();
+  if (errinfo_ == NULL) errinfo_ = new ::common::errorinfo;
+  // @@protoc_insertion_point(field_mutable:protocol.QuotConfigGetRes.errinfo)
+  return errinfo_;
+}
+inline ::common::errorinfo* QuotConfigGetRes::release_errinfo() {
+  clear_has_errinfo();
+  ::common::errorinfo* temp = errinfo_;
+  errinfo_ = NULL;
+  return temp;
+}
+inline void QuotConfigGetRes::set_allocated_errinfo(::common::errorinfo* errinfo) {
+  delete errinfo_;
+  errinfo_ = errinfo;
+  if (errinfo) {
+    set_has_errinfo();
+  } else {
+    clear_has_errinfo();
+  }
+  // @@protoc_insertion_point(field_set_allocated:protocol.QuotConfigGetRes.errinfo)
+}
+
+// optional bool supports_search = 2;
+inline bool QuotConfigGetRes::has_supports_search() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void QuotConfigGetRes::set_has_supports_search() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void QuotConfigGetRes::clear_has_supports_search() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void QuotConfigGetRes::clear_supports_search() {
+  supports_search_ = false;
+  clear_has_supports_search();
+}
+inline bool QuotConfigGetRes::supports_search() const {
+  // @@protoc_insertion_point(field_get:protocol.QuotConfigGetRes.supports_search)
+  return supports_search_;
+}
+inline void QuotConfigGetRes::set_supports_search(bool value) {
+  set_has_supports_search();
+  supports_search_ = value;
+  // @@protoc_insertion_point(field_set:protocol.QuotConfigGetRes.supports_search)
+}
+
+// optional bool supports_group_request = 3;
+inline bool QuotConfigGetRes::has_supports_group_request() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void QuotConfigGetRes::set_has_supports_group_request() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void QuotConfigGetRes::clear_has_supports_group_request() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void QuotConfigGetRes::clear_supports_group_request() {
+  supports_group_request_ = false;
+  clear_has_supports_group_request();
+}
+inline bool QuotConfigGetRes::supports_group_request() const {
+  // @@protoc_insertion_point(field_get:protocol.QuotConfigGetRes.supports_group_request)
+  return supports_group_request_;
+}
+inline void QuotConfigGetRes::set_supports_group_request(bool value) {
+  set_has_supports_group_request();
+  supports_group_request_ = value;
+  // @@protoc_insertion_point(field_set:protocol.QuotConfigGetRes.supports_group_request)
+}
+
+// optional string supported_resolutions = 4;
+inline bool QuotConfigGetRes::has_supported_resolutions() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void QuotConfigGetRes::set_has_supported_resolutions() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void QuotConfigGetRes::clear_has_supported_resolutions() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void QuotConfigGetRes::clear_supported_resolutions() {
+  if (supported_resolutions_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    supported_resolutions_->clear();
+  }
+  clear_has_supported_resolutions();
+}
+inline const ::std::string& QuotConfigGetRes::supported_resolutions() const {
+  // @@protoc_insertion_point(field_get:protocol.QuotConfigGetRes.supported_resolutions)
+  return *supported_resolutions_;
+}
+inline void QuotConfigGetRes::set_supported_resolutions(const ::std::string& value) {
+  set_has_supported_resolutions();
+  if (supported_resolutions_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    supported_resolutions_ = new ::std::string;
+  }
+  supported_resolutions_->assign(value);
+  // @@protoc_insertion_point(field_set:protocol.QuotConfigGetRes.supported_resolutions)
+}
+inline void QuotConfigGetRes::set_supported_resolutions(const char* value) {
+  set_has_supported_resolutions();
+  if (supported_resolutions_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    supported_resolutions_ = new ::std::string;
+  }
+  supported_resolutions_->assign(value);
+  // @@protoc_insertion_point(field_set_char:protocol.QuotConfigGetRes.supported_resolutions)
+}
+inline void QuotConfigGetRes::set_supported_resolutions(const char* value, size_t size) {
+  set_has_supported_resolutions();
+  if (supported_resolutions_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    supported_resolutions_ = new ::std::string;
+  }
+  supported_resolutions_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:protocol.QuotConfigGetRes.supported_resolutions)
+}
+inline ::std::string* QuotConfigGetRes::mutable_supported_resolutions() {
+  set_has_supported_resolutions();
+  if (supported_resolutions_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    supported_resolutions_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:protocol.QuotConfigGetRes.supported_resolutions)
+  return supported_resolutions_;
+}
+inline ::std::string* QuotConfigGetRes::release_supported_resolutions() {
+  clear_has_supported_resolutions();
+  if (supported_resolutions_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = supported_resolutions_;
+    supported_resolutions_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void QuotConfigGetRes::set_allocated_supported_resolutions(::std::string* supported_resolutions) {
+  if (supported_resolutions_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete supported_resolutions_;
+  }
+  if (supported_resolutions) {
+    set_has_supported_resolutions();
+    supported_resolutions_ = supported_resolutions;
+  } else {
+    clear_has_supported_resolutions();
+    supported_resolutions_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:protocol.QuotConfigGetRes.supported_resolutions)
+}
+
+// optional bool supports_marks = 5;
+inline bool QuotConfigGetRes::has_supports_marks() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void QuotConfigGetRes::set_has_supports_marks() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void QuotConfigGetRes::clear_has_supports_marks() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void QuotConfigGetRes::clear_supports_marks() {
+  supports_marks_ = false;
+  clear_has_supports_marks();
+}
+inline bool QuotConfigGetRes::supports_marks() const {
+  // @@protoc_insertion_point(field_get:protocol.QuotConfigGetRes.supports_marks)
+  return supports_marks_;
+}
+inline void QuotConfigGetRes::set_supports_marks(bool value) {
+  set_has_supports_marks();
+  supports_marks_ = value;
+  // @@protoc_insertion_point(field_set:protocol.QuotConfigGetRes.supports_marks)
+}
+
+// optional bool supports_time = 6;
+inline bool QuotConfigGetRes::has_supports_time() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void QuotConfigGetRes::set_has_supports_time() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void QuotConfigGetRes::clear_has_supports_time() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void QuotConfigGetRes::clear_supports_time() {
+  supports_time_ = false;
+  clear_has_supports_time();
+}
+inline bool QuotConfigGetRes::supports_time() const {
+  // @@protoc_insertion_point(field_get:protocol.QuotConfigGetRes.supports_time)
+  return supports_time_;
+}
+inline void QuotConfigGetRes::set_supports_time(bool value) {
+  set_has_supports_time();
+  supports_time_ = value;
+  // @@protoc_insertion_point(field_set:protocol.QuotConfigGetRes.supports_time)
 }
 
 

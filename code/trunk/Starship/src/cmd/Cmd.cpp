@@ -16,6 +16,10 @@ Cmd::Cmd()
     : m_pErrBuff(NULL), m_pLabor(0), m_pLogger(0), m_iCmd(0)
 {
     m_pErrBuff = new char[gc_iErrBuffLen];
+	m_uiImid = 0;
+	m_uiGroupId = 0;
+	m_uiCmd = 0;
+	m_strPublicLog = "";//统一输出日志数据
 }
 
 Cmd::~Cmd()
@@ -25,6 +29,11 @@ Cmd::~Cmd()
         delete[] m_pErrBuff;
         m_pErrBuff = NULL;
     }
+}
+
+const std::string& Cmd::GetWorkPath() const
+{
+    return(m_pLabor->GetWorkPath());
 }
 
 uint32 Cmd::GetNodeId()
@@ -37,9 +46,36 @@ uint32 Cmd::GetWorkerIndex()
     return(m_pLabor->GetWorkerIndex());
 }
 
-bool Cmd::RegisterCallback(Step* pStep)
+const std::string& Cmd::GetWorkerIdentify()
 {
-    return(m_pLabor->RegisterCallback(pStep));
+    if (m_strWorkerIdentify.size() < 5) // IP + port + worker_index长度一定会大于这个数即可，不在乎数值是什么
+    {
+        char szWorkerIdentify[64] = {0};
+        snprintf(szWorkerIdentify, 64, "%s:%d.%d", m_pLabor->GetHostForServer().c_str(),
+                        m_pLabor->GetPortForServer(), m_pLabor->GetWorkerIndex());
+        m_strWorkerIdentify = szWorkerIdentify;
+    }
+    return(m_strWorkerIdentify);
+}
+
+const std::string& Cmd::GetNodeType() const
+{
+    return(m_pLabor->GetNodeType());
+}
+
+const loss::CJsonObject& Cmd::GetCustomConf() const
+{
+    return(m_pLabor->GetCustomConf());
+}
+
+time_t Cmd::GetNowTime() const
+{
+    return(m_pLabor->GetNowTime());
+}
+
+bool Cmd::RegisterCallback(Step* pStep, ev_tstamp dTimeout)
+{
+    return(m_pLabor->RegisterCallback(pStep, dTimeout));
 }
 
 void Cmd::DeleteCallback(Step* pStep)

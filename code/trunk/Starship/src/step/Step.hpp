@@ -148,6 +148,62 @@ public:
         return(m_bRegistered);
     }
 
+	 /**
+     * @brief 设置公共日志格式数据
+     * @return 
+     */
+    void SetPublicLog(const oss::uint32 &uiCmd,const oss::uint32 &uiImid,const oss::uint32 &uiGroupId) 
+    {
+		m_uiCmd = uiCmd;
+		m_uiImid = uiImid;
+		m_uiGroupId = uiGroupId;
+		m_strPublicLog = "";
+    }
+
+	/**
+     * @brief 设置公共日志数据
+     * @return 
+     */
+	void SetPublicLog(const std::string &strLog) 
+	{
+		m_strPublicLog = strLog;
+	}
+
+	 /**
+     * @brief 获取公共日志数据
+     * @return 
+     */
+	const std::string GetPublicLog()
+	{
+		if (m_strPublicLog.length()>0)
+		{
+			return m_strPublicLog;
+		}
+		char strPublicLog[200] = {0};
+		char szID[50] = {0};
+		if (m_uiCmd>0)
+		{
+			snprintf(szID,sizeof(szID),"cmd:%u ",m_uiCmd);
+			strncat(strPublicLog,szID,sizeof(strPublicLog));
+		}
+
+		if (m_uiImid>0)
+		{
+			memset(szID,0,sizeof(szID));
+			snprintf(szID,sizeof(szID),"imid:%u ",m_uiImid);
+			strncat(strPublicLog,szID,sizeof(strPublicLog));
+		}
+
+		if (m_uiGroupId>0)
+		{
+			memset(szID,0,sizeof(szID));
+			snprintf(szID,sizeof(szID),"group_id:%u ",m_uiGroupId);
+			strncat(strPublicLog,szID,sizeof(strPublicLog));
+		}
+
+		m_strPublicLog = std::string(strPublicLog);
+		return m_strPublicLog;
+	}
 protected:
     /**
      * @brief 登记回调步骤
@@ -195,6 +251,12 @@ protected:
     void DeleteCallback(Session* pSession);
 
     /**
+     * @brief 获取工作目录
+     * @return 工作目录
+     */
+    const std::string& GetWorkPath() const;
+
+    /**
      * @brief 获取日志类实例
      * @note 派生类写日志时调用
      * @return 日志类实例
@@ -224,6 +286,20 @@ protected:
      * @return 当前节点类型
      */
     const std::string& GetNodeType() const;
+
+    /**
+     * @brief 获取Server自定义配置
+     * @return Server自定义配置
+     */
+    const loss::CJsonObject& GetCustomConf() const;
+
+    /**
+     * @brief 获取当前时间
+     * @note 获取当前时间，比time(NULL)速度快消耗小，不过没有time(NULL)精准，如果对时间精度
+     * 要求不是特别高，建议调用GetNowTime()替代time(NULL)
+     * @return 当前时间
+     */
+    time_t GetNowTime() const;
 
     /**
      * @brief 获取框架层操作者实例
@@ -480,6 +556,10 @@ private:
     std::set<uint32> m_setPreStepSeq;
 
     friend class OssWorker;
+	oss::uint32 m_uiImid;
+	oss::uint32 m_uiGroupId;
+	oss::uint32 m_uiCmd;
+	std::string m_strPublicLog;//统一输出日志数据
 };
 
 } /* namespace oss */

@@ -40,3 +40,17 @@ message forced_offline_ntf
 	optional common.errorinfo error = 1; // 错误码信息
 }
 
+message QuotConfigGetReq
+{
+
+}
+
+message QuotConfigGetRes
+{
+    required common.errorinfo errinfo = 1;
+    optional bool supports_search = 2;          //是否支持检索	
+    optional bool supports_group_request = 3;   //是否支持商品集合检索	
+    optional string supported_resolutions = 4;  //分辨率数组
+    optional bool supports_marks = 5;           //是否支持K线标记
+    optional bool supports_time = 6;            //是否提供服务器时间
+}

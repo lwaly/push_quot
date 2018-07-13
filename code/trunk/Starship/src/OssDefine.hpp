@@ -15,6 +15,9 @@
 #define NODE_BEAT 1.0
 #endif
 
+#ifndef WORKER_BEAT
+#define WORKER_BEAT 10.0//主要是用在DbAgenWriter
+#endif
 #define LOG4_FATAL(args...) LOG4CPLUS_FATAL_FMT(GetLogger(), ##args)
 #define LOG4_ERROR(args...) LOG4CPLUS_ERROR_FMT(GetLogger(), ##args)
 #define LOG4_WARN(args...) LOG4CPLUS_WARN_FMT(GetLogger(), ##args)
@@ -36,6 +39,9 @@ typedef unsigned long long int uint64;
 
 /** @brief 心跳间隔时间（单位:秒） */
 const int gc_iBeatInterval = NODE_BEAT;
+
+/** @brief worker与manager心跳间隔时间（单位:秒）主要是用在DbAgenWriter */
+const int gc_iWorkerBeatInterval = WORKER_BEAT;
 
 /** @brief 每次epoll_wait能处理的最大事件数  */
 const int gc_iMaxEpollEvents = 100;

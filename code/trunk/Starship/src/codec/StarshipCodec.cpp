@@ -178,7 +178,7 @@ bool StarshipCodec::Gunzip(const std::string& strSrc, std::string& strDest)
             oUnZipper.Get((byte*)&strDest[0], strDest.size());
         }
     }
-    catch(CryptoPP::InvalidDataFormat& e)
+    catch(CryptoPP::Exception& e)
     {
         LOG4_ERROR("%s", e.GetWhat().c_str());
         return(false);
@@ -251,6 +251,72 @@ bool StarshipCodec::Rc5Decrypt(const std::string& strSrc, std::string& strDest)
     return(true);
 }
 
+bool StarshipCodec::Rc5Encrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest)
+{
+	rc5UserKey *pKey;
+	rc5CBCAlg *pAlg;
+	unsigned char szIv[20] = {"2015-08-10 08:53:47"};
+	char* ucKey = new char[strKey.size()];
+	char* pPlain = new char[strSrc.size()];
+	char* pCipher = new char[strSrc.size() * 2];
+	int cipher_length = 0;
+	int numBytesOut = 0;
+
+	memcpy(ucKey, strKey.c_str(), strKey.size());
+	memcpy(pPlain, strSrc.c_str(), strSrc.size());
+	pKey = RC5_Key_Create();
+	RC5_Key_Set(pKey, strKey.size(), (unsigned char*)ucKey);
+
+	pAlg = RC5_CBC_Create(1, 16, RC5_FIRST_VERSION, BB, szIv);
+	(void) RC5_CBC_Encrypt_Init(pAlg, pKey);
+	(void) RC5_CBC_Encrypt_Update(pAlg, strSrc.size(), (unsigned char*)pPlain,
+		&(numBytesOut), strSrc.size() * 2, (unsigned char*)pCipher);
+	cipher_length += numBytesOut;
+	(void) RC5_CBC_Encrypt_Final(pAlg, &(numBytesOut),
+		strSrc.size() * 2 - cipher_length, (unsigned char*)pCipher + cipher_length);
+	cipher_length += numBytesOut;
+	strDest.assign((const char*)pCipher, cipher_length);
+	delete[] ucKey;
+	delete[] pPlain;
+	delete[] pCipher;
+	RC5_Key_Destroy(pKey);
+	RC5_CBC_Destroy(pAlg);
+	return(true);
+}
+
+bool StarshipCodec::Rc5Decrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest)
+{
+	rc5UserKey *pKey;
+	rc5CBCAlg *pAlg;
+	unsigned char szIv[20] = {"2015-08-10 08:53:47"};
+	char* ucKey = new char[strKey.size()];
+	char* pCipher = new char[strSrc.size()];
+	char* pPlain = new char[strSrc.size()];
+	int plain_length = 0;
+	int numBytesOut = 0;
+	int fillBytes = 0;
+
+	memcpy(ucKey, strKey.c_str(), strKey.size());
+	memcpy(pCipher, strSrc.c_str(), strSrc.size());
+	pKey = RC5_Key_Create();
+	RC5_Key_Set(pKey, strKey.size(), (unsigned char*)ucKey);
+
+	pAlg = RC5_CBC_Create(1, 16, RC5_FIRST_VERSION, BB, szIv);
+	(void) RC5_CBC_Decrypt_Init(pAlg, pKey);
+	(void) RC5_CBC_Decrypt_Update(pAlg, strSrc.size(), (unsigned char*)pCipher,
+		&(numBytesOut), (unsigned char*)pPlain);
+	fillBytes = (int)pPlain[numBytesOut - 1];
+	plain_length += numBytesOut - fillBytes;
+	strDest.assign((const char*)pPlain, plain_length);
+	delete[] ucKey;
+	delete[] pCipher;
+	delete[] pPlain;
+	RC5_Key_Destroy(pKey);
+	RC5_CBC_Destroy(pAlg);
+	return(true);
+}
+
+//////////////////////////////////////////////////////////////////////////
 bool StarshipCodec::AesEncrypt(const std::string& strSrc, std::string& strDest)
 {
     try
@@ -299,6 +365,58 @@ bool StarshipCodec::AesDecrypt(const std::string& strSrc, std::string& strDest)
         return(false);
     }
     return(true);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+bool StarshipCodec::AesEncrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest)
+{
+	try
+	{
+		CryptoPP::CBC_Mode<CryptoPP::AES>::Encryption oAes;
+		oAes.SetKeyWithIV((const byte*)strKey.c_str(), 16, (const byte*)"2015-08-10 08:53:47");
+		CryptoPP::StreamTransformationFilter oEncryptor(
+			oAes, NULL, CryptoPP::BlockPaddingSchemeDef::PKCS_PADDING);
+		for (size_t i = 0; i < strSrc.size(); ++i)
+		{
+			oEncryptor.Put((byte)strSrc[i]);
+		}
+		oEncryptor.MessageEnd();
+		size_t length = oEncryptor.MaxRetrievable();
+		strDest.resize(length, 0);
+		oEncryptor.Get((byte*)&strDest[0], length);
+	}
+	catch(CryptoPP::InvalidDataFormat& e)
+	{
+		LOG4_ERROR("%s", e.GetWhat().c_str());
+		return(false);
+	}
+	return(true);
+}
+
+bool StarshipCodec::AesDecrypt(const std::string& strKey,const std::string& strSrc, std::string& strDest)
+{
+	try
+	{
+		CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption oAes;
+		oAes.SetKeyWithIV((const byte*)strKey.c_str(), 16, (const byte*)"2015-08-10 08:53:47");
+		CryptoPP::StreamTransformationFilter oDecryptor(
+			oAes, NULL, CryptoPP::BlockPaddingSchemeDef::PKCS_PADDING);
+		for (size_t i = 0; i < strSrc.size(); ++i)
+		{
+			oDecryptor.Put((byte)strSrc[i]);
+		}
+		oDecryptor.MessageEnd();
+		size_t length = oDecryptor.MaxRetrievable();
+		strDest.resize(length, 0);
+		oDecryptor.Get((byte*)&strDest[0], length);
+	}
+	catch(CryptoPP::InvalidDataFormat& e)
+	{
+		LOG4_ERROR("%s", e.GetWhat().c_str());
+		return(false);
+	}
+	return(true);
 }
 
 } /* namespace oss */

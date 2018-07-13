@@ -70,6 +70,8 @@ protected:
         m_strClassName = strClassName;
     }
 
+    const std::string& GetWorkPath() const;
+
     log4cplus::Logger GetLogger()
     {
         return (*m_pLogger);
@@ -94,11 +96,39 @@ protected:
     uint32 GetWorkerIndex();
 
     /**
+     * @brief 获取当前Worker进程标识符
+     * @note 当前Worker进程标识符由 IP:port:worker_index组成，例如： 192.168.18.22:30001.2
+     * @return 当前Worker进程标识符
+     */
+    const std::string& GetWorkerIdentify();
+
+    /**
+     * @brief 获取当前节点类型
+     * @return 当前节点类型
+     */
+    const std::string& GetNodeType() const;
+
+    /**
+     * @brief 获取Server自定义配置
+     * @return Server自定义配置
+     */
+    const loss::CJsonObject& GetCustomConf() const;
+
+    /**
+     * @brief 获取当前时间
+     * @note 获取当前时间，比time(NULL)速度快消耗小，不过没有time(NULL)精准，如果对时间精度
+     * 要求不是特别高，建议调用GetNowTime()替代time(NULL)
+     * @return 当前时间
+     */
+    time_t GetNowTime() const;
+
+    /**
      * @brief 注册步骤
      * @param pStep 回调步骤
+     * @param dTimeout 步骤超时时间
      * @return 是否注册成功
      */
-    bool RegisterCallback(Step* pStep);
+    bool RegisterCallback(Step* pStep, ev_tstamp dTimeout = 0.0);
 
     /**
      * @brief 删除步骤
@@ -153,6 +183,51 @@ protected:
     Session* GetSession(uint32 uiSessionId, const std::string& strSessionClass = "oss::Session");
     Session* GetSession(const std::string& strSessionId, const std::string& strSessionClass = "oss::Session");
 
+		 /**
+     * @brief 设置公共日志格式数据
+     * @return 
+     */
+    void SetPublicLog(const oss::uint32 &uiCmd,const oss::uint32 &uiImid,const oss::uint32 &uiGroupId) 
+    {
+		m_uiCmd = uiCmd;
+		m_uiImid = uiImid;
+		m_uiGroupId = uiGroupId;
+		m_strPublicLog = "";
+    }
+
+	 /**
+     * @brief 获取公共日志数据
+     * @return 
+     */
+	const std::string GetPublicLog()
+	{
+		if (m_strPublicLog.length()>0)
+		{
+			return m_strPublicLog;
+		}
+		char strPublicLog[200] = {0};
+		char szID[50] = {0};
+		if (m_uiCmd>0)
+		{
+			snprintf(szID,sizeof(szID),"cmd:%u ",m_uiCmd);
+			strncat(strPublicLog,szID,sizeof(strPublicLog));
+		}
+
+		if (m_uiImid>0)
+		{
+			snprintf(szID,sizeof(szID),"imid:%u ",m_uiImid);
+			strncat(strPublicLog,szID,sizeof(strPublicLog));
+		}
+
+		if (m_uiGroupId>0)
+		{
+			snprintf(szID,sizeof(szID),"group_id:%u ",m_uiGroupId);
+			strncat(strPublicLog,szID,sizeof(strPublicLog));
+		}
+
+		m_strPublicLog = std::string(strPublicLog);
+		return m_strPublicLog;
+	}
 public:
     const std::string& ClassName() const
     {
@@ -185,11 +260,16 @@ private:
 
 protected:
     char* m_pErrBuff;
+	oss::uint32 m_uiImid;
+	oss::uint32 m_uiGroupId;
+	oss::uint32 m_uiCmd;
+	std::string m_strPublicLog;//统一输出日志数据
 
 private:
     OssLabor* m_pLabor;
     log4cplus::Logger* m_pLogger;
     std::string m_strConfigPath;
+    std::string m_strWorkerIdentify;
     int m_iCmd;
     std::string m_strClassName;
 

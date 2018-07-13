@@ -17,8 +17,8 @@
     "log_level":0,
     "refresh_interval":1,
     "so":[
-        {"cmd":505, "so_path":"plugins/Proxy/CmdDataProxy.so", "entrance_symbol":"create", "load":true, "version":2},
-        {"cmd":511, "so_path":"plugins/Proxy/CmdLocateData.so", "entrance_symbol":"create", "load":true, "version":2}
+        {"cmd":505, "so_path":"plugins/DataProxy/CmdDataProxy.so", "entrance_symbol":"create", "load":true, "version":2},
+        {"cmd":511, "so_path":"plugins/DataProxy/CmdLocateData.so", "entrance_symbol":"create", "load":true, "version":2}
     ]
 }
 

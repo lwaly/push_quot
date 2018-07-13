@@ -49,7 +49,7 @@ LDFLAGS := $(LDFLAGS) -D_LINUX_OS_ \
            -L$(LIB3RD_PATH)/lib -lev \
 		   -L$(LIB3RD_PATH)/lib -ljemalloc \
            -L$(SYSTEM_LIB_PATH) -lpthread \
-           -L$(SYSTEM_LIB_PATH) -ldl -lrt
+           -L$(SYSTEM_LIB_PATH) -ldl -lrt -lz
 
 SUB_INCLUDE = cmd step session labor protocol
 COMM_PATH = $(STARSHIP_PATH)/src/cmd \
