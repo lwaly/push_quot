@@ -1,0 +1,50 @@
+{
+	"data_type":["attribute","log"],
+	"data_type_enum":{"attribute":1, "log":2},
+	"section_factor":["imid", "string"],
+	"section_factor_enum":{"imid":1, "string":2},
+	"factor_section":{
+		"imid":[10000000, 20000000],
+		"string":[4294967295]
+	},
+	"table":{
+		"tb_userinfo":{"data_type":1, "section_factor":1, "db_name":"xoxdb", "table_num":1},
+        	"tb_audiolist":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+		"tb_audio_download":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+		"tb_audio_type":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+		"tb_pictures":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+		"tb_camera":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+		"tb_pictures_download":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+        	"tb_effect":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1},
+        	"tb_effect_download":{"data_type":1, "section_factor":1, "db_name":"bsw_db", "table_num":1}
+	},
+	"database":{
+		"ly":{"db_group":"im_user"}
+	},
+	"cluster":{
+		"attribute":{
+			"imid":{
+				"LE_10000000":{"im_user":"im_db_instance_1"},
+				"LE_20000000":{"im_user":"im_db_instance_2"}
+			},
+			"string":{
+				"LE_4294967295":{"im_user":"im_db_instance_1"}
+			}
+		},
+		"log":{
+			"imid":{
+				"LE_10000000":{"im_user":"im_db_instance_1"},
+				"LE_20000000":{"im_user":"im_db_instance_2"}
+			},
+			"string":{
+				"LE_4294967295":{"im_user":"im_db_instance_1"}
+			}
+		}
+	},
+	"db_group":{
+	    "im_db_instance_1":{"master_host":"192.168.1.212", "slave_host":"192.168.1.212", "port":3306,
+		    "user":"root", "password":"111111", "charset":"utf8mb4", "query_permit":6, "timeout":3},
+		"im_db_instance_2":{"master_host":"192.168.1.212", "slave_host":"192.168.1.212", "port":3306,
+		    "user":"root", "password":"111111", "charset":"utf8mb4", "query_permit":6, "timeout":3}
+	}
+}

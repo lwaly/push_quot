@@ -1,0 +1,23 @@
+{
+    "dbip":"192.168.22.159",
+    "dbport":3306,
+    "dbuser":"mgcex",
+    "dbpwd":"123456",
+    "dbname":"ly",
+    "dbcharacterset":"utf8",
+    "nodereport_timeinterval":10,
+    "nodeoffline_timeinterval":20,
+    "nodestatuscheck_timeinterval":60,
+    "deleteofflinenode_timeinterval":86400,
+    "nodeloadlog_timeinterval":60,
+    "nodeloadlog_overdue":5184000,
+    "nodeloadstatistics_timeinterval":300,
+    "nodeloadstatistics_overdue":5184000,
+    "nodeloadcheck_timeinterval":86400,
+    "serverdataloadstatuslog_overdue":5184000,
+    "serverdataloadstatuslogcheck_timeinterval":60,
+    "center_inner_host":"192.168.22.243",
+    "center_inner_port":15000,
+    "center_node_type":"CENTER",
+    "center_process_num":1
+}

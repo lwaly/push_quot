@@ -1,0 +1,14 @@
+{
+    "brief":"redis数据结构与DB表对应关系",
+    "note":"所有数据结构都需要在此配置，即便是无对应的DB表。relative中的table表示redis数据结构与表无强关联关系或redis的hash",	
+    "see":"redis数据结构设计说明书",
+	"data_type":["attribute","log"],
+	"data_type_enum":{"attribute":1, "log":2},
+	"section_factor":["imid", "string"],
+	"section_factor_enum":{"imid":1, "string":2},
+    "relative":{"table":0, "dataset":1, "join":2},
+    "redis_struct":{
+    },
+    "tables":{
+    }
+}

@@ -1,0 +1,12 @@
+prefix=/work/imdev/IM3.0/l3oss
+exec_prefix=/work/imdev/IM3.0/l3oss
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+install_suffix=
+
+Name: jemalloc
+Description: A general purpose malloc(3) implementation that emphasizes fragmentation avoidance and scalable concurrency support.
+URL: http://www.canonware.com/jemalloc
+Version: 4.1.0-0-gdf900dbfaf4835d3efc06d771535f3e781544913
+Cflags: -I${includedir}
+Libs: -L${libdir} -ljemalloc${install_suffix}

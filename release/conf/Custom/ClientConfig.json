@@ -1,0 +1,40 @@
+{
+    "new_client_version": "bg_update",
+    "audio_category_time": 100,
+    "camera_info": 100,
+    "lyric": {
+        "lyric_ftp_ip": "webv1.boshiwan.cn",
+        "lyric_ftp_port": 813,
+        "lyric_ftp_user": "geci",
+        "lyric_ftp_pwd": "geci~123"
+    },
+    "user": {
+        "register_url": "http://webv1.boshiwan.cn:89/index.php?action=zhuce&opt=boshiwan",
+        "forgot_pwd_url": "http://webv1.boshiwan.cn:82/index.php?r=mber/forgetpass",
+        "change_pwd_url": "http://webv1.boshiwan.cn:82/index.php?r=mber/editpass"
+    },
+    "cloud": {
+        "cloud_audio_url": "http://webv1.boshiwan.cn:82/index.php?r=audio/index&rt=audio",
+        "cloud_effect_url": "http://webv1.boshiwan.cn:82/index.php?r=audio/index&rt=video",
+        "cloud_camera_effect_url": "http://webv1.boshiwan.cn:82/index.php?r=picture",
+        "cloud_audio_upload_url": "http://webv1.boshiwan.cn:82/xoxadmin/web/index.php?r=audio/postbo"
+    },
+    "addtion": {
+        "keynote_query_url": "http://effecter.hhjjuser.com/index.php?r=musictone/boindex",
+        "advertisement_url": "http://webv1.boshiwan.cn:82/index.php?r=audio/boer",
+        "share_qq_url": "http://connect.qq.com/widget/shareqq/index.html?title=分享给我的QQ好友&url=http://www.kesuosi.com.cn/Admin/Download_List.aspx&desc=播是玩是一款非常好玩的软件，这里有好多音频和特效，分享快乐就从播是玩开始~~&pics=&site=客所思",
+        "share_qqzone_url": "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.kesuosi.com.cn/Admin/Download_List.aspx",
+        "soft_download_url": "http://www.kesuosi.com.cn/Admin/Download_List.aspx",
+        "suggestion_url": "http://webv1.boshiwan.cn:82/index.php?r=audio/suggest"
+    },
+    "bug": {
+        "bug_report_ftp_ip": "192.168.1.100",
+        "bug_report_ftp_port": 3000,
+        "bug_report_ftp_user": "zhangzou",
+        "bug_report_ftp_pwd": "zhangzou"
+    },
+    "server": {
+        "file_server_ip": "192.168.2.162",
+        "file_server_port": 3001
+    }
+}

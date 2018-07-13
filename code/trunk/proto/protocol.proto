@@ -1,0 +1,42 @@
+package protocol;
+import "common.proto";
+
+//用户行为
+///////////////////////////////////////////////////////////////////////////////////////
+
+//客户端登录
+message ulogin
+{
+	required uint32 uid		                = 1; // 用户ID
+	required bytes auth_code                = 2; // 用户验证码
+	required bytes password                 = 3; // 密码（32位md5密码）
+	required common.client_info client_info = 4; // 客户端信息
+	optional bytes ser_nodeIdentify	        = 5; // 服务端使用，客户端不用填充		
+}
+
+//客户端登录回应
+message ulogin_ack
+{
+	required common.errorinfo error           = 1; // 错误码信息
+    optional uint32 beat_time                 = 2; // 客户端心跳时间间隔
+    optional uint32 login_prompt              = 3; // 登录提示(填充枚举值 enumeration.E_LOGIN_PROMPT)
+}
+
+//客户端退出
+message ulogout
+{
+	required uint32 uid = 1; //用户id
+}
+
+//客户端退出响应
+message ulogout_ack
+{
+	optional common.errorinfo error = 1; // 错误码信息
+}
+
+//踢人（服务主动通知客户端，客户端无须应答，服务发完这个包后，主动断开链接）
+message forced_offline_ntf
+{
+	optional common.errorinfo error = 1; // 错误码信息
+}
+

@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+/**
+ * @brief 消息体
+ * @note 消息体主体是body，所有业务逻辑内容均放在body里。session_id和session用于接入层路由，
+ * 两者只需要填充一个即可，首选session_id，当session_id用整型无法表达时才使用session。
+ */
+message MsgBody
+{
+    required bytes body         = 1;			///< 消息体主体
+    optional uint32 session_id  = 2;			///< 会话ID（一般是用户 ID）
+    optional string session     = 3;			///< 会话ID（当session_id 用整型无法表达时使用）
+    optional bytes additional   = 4;			///< 接入层附加的数据（客户端无须理会）
+}
+

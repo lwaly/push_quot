@@ -1,0 +1,43 @@
+{
+	"data_type":["attribute","log"],
+	"data_type_enum":{"attribute":1, "log":2},
+	"section_factor":["imid", "string"],
+	"section_factor_enum":{"imid":1, "string":2},
+	"factor_section":{
+		"imid":[10000000, 20000000],
+		"string":[4294967295]
+	},
+    "hash_algorithms":{"hash_fnv1a_64":0, "hash_fnv1_64":1, "murmur3_32":2},
+    "hash_algorithm":0,
+	"virtual_node_num":256,
+	"cluster":{
+		"attribute":{
+			"imid":{
+				"LE_10000000":["im_data_attribute_1", "im_data_attribute_2", "im_data_attribute_3", "im_data_attribute_4"],
+				"LE_20000000":["im_data_attribute_5", "im_data_attribute_6", "im_data_attribute_7", "im_data_attribute_8"]
+			},
+			"string":{
+				"LE_4294967295":["im_data_attribute_1", "im_data_attribute_2", "im_data_attribute_3", "im_data_attribute_4"]
+			}
+		},
+		"log":{
+			"imid":{
+				"LE_10000000":["im_data_log_1", "im_data_log_2", "im_data_log_3", "im_data_log_4"],
+				"LE_20000000":["im_data_log_5", "im_data_log_6", "im_data_log_7", "im_data_log_8"]
+			},
+			"string":{
+				"LE_4294967295":["im_data_log_1", "im_data_log_2", "im_data_log_3", "im_data_log_4"]
+			}
+		}
+	},
+	"redis_group":{
+		"im_data_attribute_1":{"master":"192.168.1.16:16379", "slave":"192.168.1.16:16379"},
+		"im_data_attribute_2":{"master":"192.168.1.16:16380", "slave":"192.168.1.16:16380"},
+		"im_data_attribute_3":{"master":"192.168.1.16:16381", "slave":"192.168.1.16:16381"},
+		"im_data_attribute_4":{"master":"192.168.1.16:16382", "slave":"192.168.1.16:16382"},
+		"im_data_attribute_5":{"master":"192.168.1.16:16383", "slave":"192.168.1.16:16383"},
+		"im_data_attribute_6":{"master":"192.168.1.16:16384", "slave":"192.168.1.16:16384"},
+		"im_data_attribute_7":{"master":"192.168.1.16:16385", "slave":"192.168.1.16:16385"},
+		"im_data_attribute_8":{"master":"192.168.1.16:16386", "slave":"192.168.1.16:16386"}
+	}
+}

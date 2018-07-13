@@ -1,0 +1,42 @@
+package enumeration;
+
+//客户端类型
+enum E_CLIENT_TYPE
+{
+    TYPE_CLIENT_UNKNOWN     = 0; //未定义
+    TYPE_CLIENT_PC          = 1; //电脑
+    TYPE_CLIENT_ANDROID     = 2; //安卓
+    TYPE_CLIENT_IOS         = 3; //IOS
+    TYPE_CLIENT_IPAD        = 4; //IPAD
+    TYPE_CLIENT_WEB         = 5; //网页（客服或其它管理工具)
+	TYPE_CLIENT_COUNT       = 6; //客户端类型个数
+}
+
+//登录账号类型
+enum E_ACCOUNT_LOGIN_TYPE
+{
+    TYPE_LOGIN_BY_UNKNOWN   = 0; //未定义
+    TYPE_LOGIN_BY_UID       = 1; //用户账号登录
+    TYPE_LOGIN_BY_PHONE     = 2; //用户手机登录
+    TYPE_LOGIN_BY_EMAIL     = 3; //用户邮箱登录
+    TYPE_LOGIN_BY_QQ        = 4; //用户QQ号码登录
+	TYPE_LOGIN_BY_COUNT     = 5; //用户登录类型个数
+}
+
+//操作类型
+enum E_OPERATE_TYPE
+{
+    TYPE_UNKNOWN = 0; //未定义
+    TYPE_INSERT  = 1; //添加
+    TYPE_DELETE  = 2; //删除
+    TYPE_UPDATE  = 3; //修改
+	TYPE_SELECT  = 4; //查询
+}
+
+//用户在线状态
+enum E_USER_STATUS
+{
+	STATUS_UNKNOWN_USER_STATUS = 0; //未知
+	STATUS_USER_STATUS_ON      = 1; //在线状态
+	STATUS_USER_STATUS_OFF     = 2; //下线
+}

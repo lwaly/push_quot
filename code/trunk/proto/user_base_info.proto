@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+enum E_PROHIBIT
+{
+	BAN_LOGIN							= 1; ///< 禁止登录
+}
+
+message user_base_info
+{
+	required uint32 uid				    = 1; ///< 用户 ID
+	optional uint32 app_type            = 2; ///< 用户应用类型（枚举值 E_APP_TYPE）
+	optional uint32 client_type         = 3; ///< 用户终端类型（枚举值 E_CLIENT_TYPE）
+	optional string nickname			= 4; ///< 用户昵称
+	optional string avatar_url			= 5; ///< 用户头像 url
+	optional uint32 role				= 6; ///< 用户角色、身份
+	optional string login_ip			= 7; ///< 客户端IP地址（通过OssWorker的GetClientAddr()函数可以获得）
+	optional uint32 prohibit			= 8; ///< 被禁止项（按位存储见E_PROHIBIT）
+}

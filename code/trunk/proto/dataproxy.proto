@@ -1,0 +1,151 @@
+
+syntax = "proto2";
+
+package DataMem;
+
+message MemOperate
+{
+	optional RedisOperate redis_operate  = 1;   ///< used for dataproxy and logic_svr
+	optional DbOperate db_operate        = 2;   ///< mysql sql query.
+	optional ReadDataSet read_dataset     = 3;   ///< read data is userful. but not write. dataset, key-value when value is a struct.
+	
+	message ReadDataSet
+	{
+		optional bool is_dataset          = 1;
+		optional string key_field         = 2;   ///< read is useful, but wirte is unuseful. when "hvals" command. db data to redis need field : hset key field value. 
+	}
+
+	message RedisOperate
+	{				
+		required string key_name          = 1;
+		required string redis_cmd_read    = 2;     ///< eg:"get"/"hget"/"hgetall", read data redis cmd. and add filter op for some misused key access redis cluster in futher.
+		required string redis_cmd_write   = 3;     ///< eg:"set"/"hset", write data redis cmd. and add filter op for some misused key access redis cluster in futher.
+		required OPERATE_TYPE op_type     = 4;     ///< write or read operate. 
+		required ClusterInfo cluster_info = 5;     ///< used for data fragement.
+		optional int32 key_ttl            = 6;     ///< key-value time to live.
+		repeated Field fields             = 7;     ///< used for insert new item, used for db and redis.
+		
+		
+		enum OPERATE_TYPE
+		{
+			T_READ  = 1;
+			T_WRITE = 2;
+		}
+		
+		message ClusterInfo
+		{
+			required BUSI_TYPE busi_type     = 1; ///< eg: property or log..
+			required int32 frage_factor      = 2; ///< factor for cluster fragement. eg: fill with userid or groupid etc.
+			required int32 frage_factor_type = 3; ///< factor type, userid or groupid. eg: userid for 1, group id for 2.
+
+			enum BUSI_TYPE
+			{
+				T_LOG      = 1;                   ///< busi data: p2p message or group message etc.
+				T_PROPERTY = 2;                   ///< relational data often used.
+			}
+		}
+	}
+	
+
+	//////////////////////////////////////////////////////////////////////////////
+	///< used for mysql db..
+	message DbOperate
+	{
+		required int32 key_index = 1;						///< uid or gid,分表分库使用
+		required E_QUERY_TYPE query_type  = 2;              ///< 查询类型
+		required string table_name        = 3;              ///< 表名
+		repeated Field fields             = 4;              ///< 列类型
+		repeated ConditionGroup conditions= 5;              ///< where条件组（由group_relation指定，若不指定则默认为AND关系）
+		repeated string groupby_col       = 6;              ///< group by字段
+		repeated OrderBy orderby_col      = 7;              ///< order by字段
+		optional ConditionGroup.E_RELATION group_relation = 8; ///< where条件组的关系,条件组之间有且只有一种关系（and或者or）
+		optional uint32 limit             = 9;              ///< 指定返回的行数的最大值  (limit 200)
+		optional uint32 limit_from        = 10;              ///< 指定返回的第一行的偏移量 (limit 100, 200)
+		
+		enum E_QUERY_TYPE                                   ///< 查询类型
+		{
+			SELECT                        = 0;              ///< select查询
+			INSERT                        = 1;              ///< insert插入
+			INSERT_IGNORE                 = 2;              ///< insert ignore插入，若存在则放弃
+			UPDATE                        = 3;              ///< update更新
+			REPLACE                       = 4;              ///< replace覆盖插入
+			DELETE                        = 5;              ///< delete删除
+		}
+
+		message Condition                                   ///< where条件
+		{
+			required E_RELATION relation  = 1;              ///< 关系（=, !=, >, <, >=, <= 等）
+			required E_COL_TYPE col_type  = 2;              ///< 列类型
+			required string col_name      = 3;              ///< 列名
+			repeated bytes col_values     = 4;              ///< 列值（当且仅当relation为IN时值的个数大于1有效）
+			optional string col_name_right= 5;              ///< 关系右边列名（用于where col1=col2这种情况）
+			enum E_RELATION
+			{
+				EQ                        = 0;              ///< 等于=
+				NE                        = 1;              ///< 不等于!=
+				GT                        = 2;              ///< 大于>
+				LT                        = 3;              ///< 小于<
+				GE                        = 4;              ///< 大于等于>=
+				LE                        = 5;              ///< 小于等于<=
+				LIKE                      = 6;              ///< like
+				IN                        = 7;              ///< in (1, 2, 3, 4, 5)
+			}
+		}
+
+		message ConditionGroup                              ///< where条件组合
+		{
+			required E_RELATION relation     = 1;           ///< 条件之间的关系，一个ConditionGroup里的所有Condition之间有且只有一种关系（and或者or）
+			repeated Condition condition     = 2;           ///< 条件
+			enum E_RELATION
+			{
+				AND                        = 0;             ///< and且
+				OR                         = 1;             ///< or或
+			}
+		}
+
+		message OrderBy
+		{
+			required E_RELATION relation    = 1;            ///< 降序或升序
+			required string col_name        = 2;            ///< 列名
+			enum E_RELATION
+			{
+				ASC                         = 0;
+				DESC                        = 1;
+			}
+		}
+	}
+}
+
+enum E_COL_TYPE                               ///< 列类型
+{
+	STRING                        = 0;        ///< char, varchar, text, datetime, timestamp等
+	INT                           = 1;        ///< int
+	BIGINT                        = 2;        ///< bigint
+	FLOAT                         = 3;        ///< float
+	DOUBLE                        = 4;        ///< double
+}
+
+message Record
+{
+	repeated Field field_info     = 1;        ///< value data
+}
+
+message Field                                  ///< 字段
+{
+	optional string col_name      = 1;         ///< 列名
+	optional E_COL_TYPE col_type  = 2;         ///< 列类型
+	optional bytes col_value      = 3;         ///< 列值
+	optional string col_as        = 4;         ///< as列名
+}
+
+//response: used for insert new item or get failed for redis, then send read request to db.
+//used for read from db.
+message MemRsp
+{ 
+	required int32 err_no           = 1;
+	optional bytes err_msg          = 2;
+	optional int32 totalcount       = 3;     ///< logic need not to used.
+	optional int32 curcount     	= 4;     ///< logic need not to used.
+	repeated Record record_data     = 5;
+}
+

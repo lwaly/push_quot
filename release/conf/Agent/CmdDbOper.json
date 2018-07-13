@@ -1,0 +1,40 @@
+{
+	"data_type":["attribute","log"],
+	"data_type_enum":{"attribute":1, "log":2},
+	"section_factor":["imid", "string"],
+	"section_factor_enum":{"imid":1, "string":2},
+	"factor_section":{
+		"imid":[10000000, 20000000],
+		"string":[4294967295]
+	},
+	"table":{
+
+	},
+	"database":{
+
+	},
+	"cluster":{
+		"attribute":{
+			"imid":{
+				"LE_10000000":{"im_user":"im_db_instance_1"},
+				"LE_20000000":{"im_user":"im_db_instance_2"}
+			},
+			"string":{
+				"LE_4294967295":{"im_user":"im_db_instance_1"}
+			}
+		},
+		"log":{
+			"imid":{
+				"LE_10000000":{"im_user":"im_db_instance_1"},
+				"LE_20000000":{"im_user":"im_db_instance_2"}
+			},
+			"string":{
+				"LE_4294967295":{"im_user":"im_db_instance_1"}
+			}
+		}
+	},
+	"db_group":{
+	    "im_db_instance_1":{"master_host":"192.168.22.159", "slave_host":"192.168.22.159", "port":3306,
+		    "user":"mecex", "password":"123456", "charset":"utf8mb4", "query_permit":6, "timeout":3}
+	}
+}
