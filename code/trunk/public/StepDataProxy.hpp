@@ -12,7 +12,7 @@
 
 #include "StepEx.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class StepDataProxy : public StepEx
@@ -31,6 +31,6 @@ public:
                     void* data = NULL);
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _STEP_DATA_PROXY_EX_HPP_ */

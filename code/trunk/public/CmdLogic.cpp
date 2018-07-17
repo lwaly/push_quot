@@ -11,7 +11,7 @@
 #include <enumeration.pb.h>
 #include <user_base_info.pb.h>
 
-namespace bsw
+namespace mg
 {
 
 CmdLogic::CmdLogic()
@@ -58,4 +58,4 @@ bool CmdLogic::AnyMessage(
 	return AnyMessageLogic(oErrInfo, oInContext);
 }
 
-} /* namespace bsw */
+} /* namespace mg */

@@ -13,7 +13,7 @@
 
 #include "Public.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class ISyncEvent
@@ -30,9 +30,9 @@ public:
 
 	//audio type
 	//////////////////////////////////////////////////////////////////////////
-
+    virtual void OnQuotConfigGet(const common::errorinfo& oErrInfo, const std::map<uint32, QUOT_CONFIG> mapInfo) {}
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _I_SYNC_EVENT_HPP_ */

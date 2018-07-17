@@ -1,7 +1,7 @@
 
 #include "BswErrorMapping.h"
 
-namespace bsw
+namespace mg
 {
 
 int bsw_err_code(int code)
@@ -118,50 +118,50 @@ const char * bsw_err_msg(int code)
         case oss::ERR_UNDEFINE_REDIS_OPERATE:           return "数据错误[20041]";
         case oss::ERR_REDIS_READ_WRITE_CMD_NOT_MATCH:   return "数据错误[20042]";
 
-        // bsw error
-        case bsw::ERR_PARASE_PROTOBUF:                  return "协议错误[20000]";
-        case bsw::ERR_NO_SUCH_WORKER_INDEX:             return "系统错误[20001]";
-        case bsw::ERR_UNKNOWN_CMD:                      return "未知的命令字[20002]";
-        case bsw::ERR_NEW:                              return "系统繁忙[20003]";
-        case bsw::ERR_REDIS_CONN_CLOSE:                 return "系统错误[20004]";
-        case bsw::ERR_DISCONNECT:                       return "系统错误[20005]";
-        case bsw::ERR_NO_CALLBACK:                      return "系统错误[20006]";
-        case bsw::ERR_DATA_TRANSFER:                    return "系统错误[20007]";
-        case bsw::ERR_REPEAT_REGISTERED:                return "系统繁忙[20008]";
-        case bsw::ERR_SERVERINFO:                       return "系统错误[20009]";
-        case bsw::ERR_SESSION:                          return "系统错误[20010]";
-        case bsw::ERR_BODY_JSON:                        return "协议错误[20011]";
-        case bsw::ERR_SERVERINFO_RECORD:                return "系统错误[20012]";
-        case bsw::ERR_INCOMPLET_DATAPROXY_DATA:         return "数据错误[20013]";
-        case bsw::ERR_INVALID_REDIS_ROUTE:              return "未知服务[20014]";
-        case bsw::ERR_REDIS_NODE_NOT_FOUND:             return "系统错误[20015]";
-        case bsw::ERR_REGISTERCALLBACK_REDIS:           return "系统错误[20016]";
-        case bsw::ERR_REDIS_CMD:                        return "数据错误[20017]";
-        case bsw::ERR_UNEXPECTED_REDIS_REPLY:           return "数据错误[20018]";
-        case bsw::ERR_RESULTSET_EXCEED:                 return "数据错误[20019]";
-        case bsw::ERR_LACK_CLUSTER_INFO:                return "数据错误[20020]";
-        case bsw::ERR_TIMEOUT:                          return "数据错误[20021]";
-        case bsw::ERR_REDIS_AND_DB_CMD_NOT_MATCH:       return "数据错误[20022]";
-        case bsw::ERR_REDIS_NIL_AND_DB_FAILED:          return "数据错误[20023]";
-        case bsw::ERR_NO_RIGHT:                         return "数据错误[20024]";
-        case bsw::ERR_QUERY:                            return "数据错误[20025]";
-        case bsw::ERR_REDIS_STRUCTURE_WITH_DATASET:     return "数据错误[20026]";
-        case bsw::ERR_REDIS_STRUCTURE_WITHOUT_DATASET:  return "数据错误[20027]";
-        case bsw::ERR_DB_FIELD_NUM:                     return "数据错误[20028]";
-        case bsw::ERR_DB_FIELD_ORDER_OR_FIELD_NAME:     return "数据错误[20029]";
-        case bsw::ERR_KEY_FIELD:                        return "数据错误[20030]";
-        case bsw::ERR_KEY_FIELD_VALUE:                  return "数据错误[20031]";
-        case bsw::ERR_JOIN_FIELDS:                      return "数据错误[20032]";
-        case bsw::ERR_LACK_JOIN_FIELDS:                 return "数据错误[20033]";
-        case bsw::ERR_REDIS_STRUCTURE_NOT_DEFINE:       return "数据错误[20034]";
-        case bsw::ERR_INVALID_CMD_FOR_HASH_DATASET:     return "数据错误[20035]";
-        case bsw::ERR_DB_TABLE_NOT_DEFINE:              return "数据错误[20036]";
-        case bsw::ERR_DB_OPERATE_MISSING:               return "数据错误[20037]";
-        case bsw::ERR_REQ_MISS_PARAM:                   return "数据错误[20038]";
-        case bsw::ERR_LACK_TABLE_FIELD:                 return "数据错误[20039]";
-        case bsw::ERR_TABLE_FIELD_NAME_EMPTY:           return "数据错误[20040]";
-        case bsw::ERR_UNDEFINE_REDIS_OPERATE:           return "数据错误[20041]";
-        case bsw::ERR_REDIS_READ_WRITE_CMD_NOT_MATCH:   return "数据错误[20042]";
+        // mg error
+        case mg::ERR_PARASE_PROTOBUF:                  return "协议错误[20000]";
+        case mg::ERR_NO_SUCH_WORKER_INDEX:             return "系统错误[20001]";
+        case mg::ERR_UNKNOWN_CMD:                      return "未知的命令字[20002]";
+        case mg::ERR_NEW:                              return "系统繁忙[20003]";
+        case mg::ERR_REDIS_CONN_CLOSE:                 return "系统错误[20004]";
+        case mg::ERR_DISCONNECT:                       return "系统错误[20005]";
+        case mg::ERR_NO_CALLBACK:                      return "系统错误[20006]";
+        case mg::ERR_DATA_TRANSFER:                    return "系统错误[20007]";
+        case mg::ERR_REPEAT_REGISTERED:                return "系统繁忙[20008]";
+        case mg::ERR_SERVERINFO:                       return "系统错误[20009]";
+        case mg::ERR_SESSION:                          return "系统错误[20010]";
+        case mg::ERR_BODY_JSON:                        return "协议错误[20011]";
+        case mg::ERR_SERVERINFO_RECORD:                return "系统错误[20012]";
+        case mg::ERR_INCOMPLET_DATAPROXY_DATA:         return "数据错误[20013]";
+        case mg::ERR_INVALID_REDIS_ROUTE:              return "未知服务[20014]";
+        case mg::ERR_REDIS_NODE_NOT_FOUND:             return "系统错误[20015]";
+        case mg::ERR_REGISTERCALLBACK_REDIS:           return "系统错误[20016]";
+        case mg::ERR_REDIS_CMD:                        return "数据错误[20017]";
+        case mg::ERR_UNEXPECTED_REDIS_REPLY:           return "数据错误[20018]";
+        case mg::ERR_RESULTSET_EXCEED:                 return "数据错误[20019]";
+        case mg::ERR_LACK_CLUSTER_INFO:                return "数据错误[20020]";
+        case mg::ERR_TIMEOUT:                          return "数据错误[20021]";
+        case mg::ERR_REDIS_AND_DB_CMD_NOT_MATCH:       return "数据错误[20022]";
+        case mg::ERR_REDIS_NIL_AND_DB_FAILED:          return "数据错误[20023]";
+        case mg::ERR_NO_RIGHT:                         return "数据错误[20024]";
+        case mg::ERR_QUERY:                            return "数据错误[20025]";
+        case mg::ERR_REDIS_STRUCTURE_WITH_DATASET:     return "数据错误[20026]";
+        case mg::ERR_REDIS_STRUCTURE_WITHOUT_DATASET:  return "数据错误[20027]";
+        case mg::ERR_DB_FIELD_NUM:                     return "数据错误[20028]";
+        case mg::ERR_DB_FIELD_ORDER_OR_FIELD_NAME:     return "数据错误[20029]";
+        case mg::ERR_KEY_FIELD:                        return "数据错误[20030]";
+        case mg::ERR_KEY_FIELD_VALUE:                  return "数据错误[20031]";
+        case mg::ERR_JOIN_FIELDS:                      return "数据错误[20032]";
+        case mg::ERR_LACK_JOIN_FIELDS:                 return "数据错误[20033]";
+        case mg::ERR_REDIS_STRUCTURE_NOT_DEFINE:       return "数据错误[20034]";
+        case mg::ERR_INVALID_CMD_FOR_HASH_DATASET:     return "数据错误[20035]";
+        case mg::ERR_DB_TABLE_NOT_DEFINE:              return "数据错误[20036]";
+        case mg::ERR_DB_OPERATE_MISSING:               return "数据错误[20037]";
+        case mg::ERR_REQ_MISS_PARAM:                   return "数据错误[20038]";
+        case mg::ERR_LACK_TABLE_FIELD:                 return "数据错误[20039]";
+        case mg::ERR_TABLE_FIELD_NAME_EMPTY:           return "数据错误[20040]";
+        case mg::ERR_UNDEFINE_REDIS_OPERATE:           return "数据错误[20041]";
+        case mg::ERR_REDIS_READ_WRITE_CMD_NOT_MATCH:   return "数据错误[20042]";
 
         case ERR_UNKNOWN:                               return "未知错误[20200]";
         case ERR_UNKNOW_CMD:                            return "未知命令字[20201]";

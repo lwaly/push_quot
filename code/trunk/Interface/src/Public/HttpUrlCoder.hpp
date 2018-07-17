@@ -16,7 +16,7 @@
 #include <vector>
 #include <algorithm>
 
-namespace bsw
+namespace mg
 {
     char *url_encode(const char *s, int len, int *new_length);
     void url_encode(std::string &s);

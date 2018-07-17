@@ -11,7 +11,7 @@
 #include "ISyncDProxyProtocol.hpp"
 #include "DataProxyEventOther.hpp"
 
-namespace bsw
+namespace mg
 {
 
 DataProxyEventOther::DataProxyEventOther() : m_pSyncEvent(NULL)
@@ -51,4 +51,4 @@ int DataProxyEventOther::HANDLE_OTHER_ACCESS_TO_LOGIC_EVENT(common::errorinfo& o
 	return HR_SUCCESS;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

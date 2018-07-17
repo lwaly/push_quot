@@ -14,7 +14,7 @@
 #include "Public.hpp"
 #include "StepEx.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class CmdEx : public oss::Cmd
@@ -30,8 +30,8 @@ public:
 	virtual bool AnyMessageLogic(const CContext& oInContext);
 	virtual bool AnyMessageLogic(common::errorinfo& oErrInfo, const CContext& oInContext);
 
-	uint32 RegisterSyncStep(bsw::StepEx* pStep);
-	uint32 RegisterSyncStep(common::errorinfo& oErrInfo, bsw::StepEx* pStep);
+	uint32 RegisterSyncStep(mg::StepEx* pStep);
+	uint32 RegisterSyncStep(common::errorinfo& oErrInfo, mg::StepEx* pStep);
 
 public:
 	std::string IntToString(uint32 uiValue);
@@ -43,6 +43,6 @@ public:
 		const CContext& oInContext, const std::string& strBuf);
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _CMD_EX_H_ */

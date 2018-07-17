@@ -11,18 +11,23 @@
 #ifndef _I_SYNC_DATA_PROXY_PROTOCOL_HPP_
 #define _I_SYNC_DATA_PROXY_PROTOCOL_HPP_
 
-namespace bsw
+namespace mg
 {
 
-//other(33001 - 34000)
-//////////////////////////////////////////////////////////////////////////
+    //other(33001 - 34000)
+    //////////////////////////////////////////////////////////////////////////
+    enum
+    {
+        CMD_DP_REQ_QUOT_CONFIG = 20001,         //获取行情配置请求
+        CMD_DP_RSP_QUOT_CONFIG,                 //获取行情配置回调
+    };
 
-enum 
-{
-	CMD_REQ_ACCESS_TO_LOGIC = 40001, //接入层转发到逻辑层请求
-	CMD_RSP_ACCESS_TO_LOGIC, //接入层转发到逻辑层回调
-};
+    enum
+    {
+        CMD_REQ_ACCESS_TO_LOGIC = 40001, //接入层转发到逻辑层请求
+        CMD_RSP_ACCESS_TO_LOGIC, //接入层转发到逻辑层回调
+    };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _I_SYNC_DATA_PROXY_PROTOCOL_HPP_ */

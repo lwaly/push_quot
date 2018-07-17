@@ -4,7 +4,7 @@
 * @brief    获取行情推送配置
 * @author   ly
 * @date:    2018年7月12日
-* @note     
+* @note
 * Modify history:
 ******************************************************************************/
 
@@ -21,15 +21,15 @@ extern "C" {
 }
 #endif
 
-namespace bsw
+namespace mg
 {
-class CmdQuotConfigGet : public CmdEx
-{
-public:
-    CmdQuotConfigGet() {}
-    virtual ~CmdQuotConfigGet() {}
-    virtual bool AnyMessageLogic(const CContext& oInContext);
-};
-} /* namespace bsw */
+    class CmdQuotConfigGet : public CmdEx
+    {
+    public:
+        CmdQuotConfigGet() {}
+        virtual ~CmdQuotConfigGet() {}
+        virtual bool AnyMessageLogic(const CContext& oInContext);
+    };
+} /* namespace mg */
 
 #endif /* _LOGIC_CMD_QUOT_CONFIG_GET_HPP_ */

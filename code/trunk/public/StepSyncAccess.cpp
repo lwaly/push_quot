@@ -27,7 +27,7 @@ enum E_SYNC_ACCESS_COMMAND
     SYNC_CMD_COUNT,
 };
 
-namespace bsw
+namespace mg
 {
 
 StepSyncAccess::StepSyncAccess(const CContext& oInContext) 
@@ -543,4 +543,4 @@ uint32 StepSyncAccess::SyncAccessToLogic()
 	return ERR_OK;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

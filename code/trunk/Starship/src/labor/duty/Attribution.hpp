@@ -81,12 +81,7 @@ struct tagWorkerAttr
         return(*this);
     }
 };
-enum ConnectStatus
-{
-    eConnectStatus_init = 0,
-    eConnectStatus_connecting = 1,
-    eConnectStatus_ok = 2,
-};
+
 /**
  * @brief 连接属性
  * @note  连接属性，因内部带有许多指针，并且没有必要提供深拷贝构造，所以不可以拷贝，也无需拷贝
@@ -118,12 +113,13 @@ struct tagConnectionAttr
     std::string strIdentify;            ///< 连接标识（可以为空，不为空时用于标识业务层与连接的关系）
     ev_io* pIoWatcher;                  ///< 不在结构体析构时回收
     ev_timer* pTimeWatcher;             ///< 不在结构体析构时回收
+	uint32 uiType;                      ///< 类型标识（客户端类型，服务器类型，等等）
 
     tagConnectionAttr()
-        : ucConnectStatus(0), pRecvBuff(NULL), pSendBuff(NULL), pWaitForSendBuff(NULL), pClientData(NULL),
+        : ucConnectStatus(255), pRecvBuff(NULL), pSendBuff(NULL), pWaitForSendBuff(NULL), pClientData(NULL),
           pRemoteAddr(NULL), eCodecType(loss::CODEC_PROTOBUF),
           dActiveTime(0), dKeepAlive(0), ulSeq(0), ulForeignSeq(0), ulMsgNumUnitTime(0), ulMsgNum(0),
-          pIoWatcher(NULL), pTimeWatcher(NULL)
+          pIoWatcher(NULL), pTimeWatcher(NULL), uiType(0)
     {
     }
 

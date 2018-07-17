@@ -5,3 +5,4 @@
 ./start.sh DataProxyServer
 ./start.sh DbAgentRead
 ./start.sh DbAgentWrite
+./start.sh InterfaceServer

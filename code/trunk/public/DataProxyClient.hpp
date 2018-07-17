@@ -11,9 +11,10 @@
 #define _DATA_PROXY_CLIENT_HPP_
 
 #include "DataProxyEventOther.hpp"
+#include "DataProxyEventQuot.hpp"
 #include "step/Step.hpp"
 
-namespace bsw
+namespace mg
 {
 
     class DataProxyClient //: public ISyncClient
@@ -33,6 +34,7 @@ namespace bsw
         //access
         virtual uint32 AccessToLogic(uint32 uiReqCmd, const MsgBody& oMsgBody);
 
+        virtual uint32 QuotConfigGet();
     public:
         uint32 GetDProxyReqCmd() { return m_uiDProxyCmd; }
         int    GetReqCount() { return m_iReqCount; }
@@ -50,8 +52,8 @@ namespace bsw
         bool   SendToWithMod(const std::string& strNodeType, unsigned int uiModFactor, const MsgHead& oMsgHead, const MsgBody& oMsgBody); //根据 sessionid 发送到指定的服务器结点
 
     private:
-        DataProxyEventOther m_oDpEventOther;	         //存储事件以外的逻辑
-
+        DataProxyEventOther m_oDpEventOther;            //存储事件以外的逻辑
+        DataProxyEventQuot m_oDpEventQuot;
     private:
         uint32 m_uiDProxyCmd;         //存储读写自定义业务命令
         uint32 m_uiSequenece;         //序列号
@@ -62,6 +64,6 @@ namespace bsw
         uint32 m_uiReqSum;            //当前业务请求累计个数。(避免死循环，要限制接口的调用个数)
     };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _DATA_PROXY_CLIENT_HPP_ */

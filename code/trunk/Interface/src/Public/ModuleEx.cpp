@@ -14,7 +14,7 @@
 #include "HttpParamCodec.hpp"
 #include "Public.hpp"
 
-namespace bsw
+namespace mg
 {
 
 ModuleEx::ModuleEx()
@@ -60,12 +60,12 @@ bool ModuleEx::AnyMessage(const oss::tagMsgShell& stMsgShell, const HttpMsg& oIn
 		}
 
 		//验证 cookie 数据
-		if (!GetCookieInfo(oErrInfo, oInHttpMsg, strToken, uiUserID))
-			break;
+		//if (!GetCookieInfo(oErrInfo, oInHttpMsg, strToken, uiUserID))
+			//break;
 
 		//官方的 ID 应该是统一过来的，不能传它们的管理员过来。
 		//现在为了调试方便，统一将小于 SYSTEM_ID 的账号转化为 OFFICAL_ID
-		if (uiUserID < SYSTEM_ID) uiUserID = OFFICAL_ID;
+		//if (uiUserID < SYSTEM_ID) uiUserID = OFFICAL_ID;
 
 	} while (0);
 
@@ -73,8 +73,8 @@ bool ModuleEx::AnyMessage(const oss::tagMsgShell& stMsgShell, const HttpMsg& oIn
 	if (oErrInfo.error_code() == ERR_OK)
 	{
 		user_base_info oUserInfo;
-		oUserInfo.set_uid(uiUserID);
-		oUserInfo.set_app_type(enumeration::TYPE_APP_AP);
+		oUserInfo.set_uid(1000);
+		oUserInfo.set_app_type(1);
 		oUserInfo.set_client_type(enumeration::TYPE_CLIENT_WEB);
 		oInContext.m_oBasicInfo = oUserInfo;
 	}
@@ -87,7 +87,7 @@ bool ModuleEx::AnyMessageLogic(common::errorinfo& oErrInfo, const CHttpContext& 
 	return true;
 }
 
-uint32 ModuleEx::RegisterSyncStep(common::errorinfo& oErrInfo, bsw::HttpStepEx* pStep)
+uint32 ModuleEx::RegisterSyncStep(common::errorinfo& oErrInfo, mg::HttpStepEx* pStep)
 {
 	if (NULL == pStep)
 	{
@@ -175,4 +175,4 @@ bool ModuleEx::GetCookieInfo(
 	return true;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

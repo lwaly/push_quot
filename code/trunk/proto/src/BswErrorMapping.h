@@ -1,7 +1,7 @@
 /*******************************************************************************
 * Project:  proto
 * @file     BswErrorMapping.h
-* @brief    bsw错误与系统错误映射
+* @brief    mg错误与系统错误映射
 * @author   wfh
 * @date:    2016年4月9日
 * @note
@@ -13,7 +13,7 @@
 #include "OssError.hpp"
 #include "BswError.h"
 
-namespace bsw
+namespace mg
 {
 
 int bsw_err_code(int code);

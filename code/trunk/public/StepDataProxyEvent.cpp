@@ -10,7 +10,7 @@
 
 #include "StepDataProxyEvent.hpp"
 
-namespace bsw
+namespace mg
 {
 
 StepDataProxyEvent::StepDataProxyEvent(const CContext& oInContext) 
@@ -131,4 +131,4 @@ oss::E_CMD_STATUS StepDataProxyEvent::CallbackLogic(common::errorinfo& oErrInfo,
 
     return oss::STATUS_CMD_RUNNING;
 }
-} /* namespace bsw */
+} /* namespace mg */

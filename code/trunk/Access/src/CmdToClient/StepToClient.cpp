@@ -10,7 +10,7 @@
 #include "BswError.h"
 #include "StepToClient.hpp"
 
-namespace bsw
+namespace mg
 {
 
 StepToClient::StepToClient(
@@ -90,4 +90,4 @@ oss::E_CMD_STATUS StepToClient::Timeout()
     return oss::STATUS_CMD_FAULT;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

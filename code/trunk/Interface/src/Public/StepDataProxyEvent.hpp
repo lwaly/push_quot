@@ -14,7 +14,7 @@
 #include "ISyncEvent.hpp"
 #include "DataProxyClient.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class StepDataProxyEvent : public HttpStepEx, public ISyncEvent
@@ -42,6 +42,6 @@ protected: //供继承者使用变量
 	DataProxyClient m_oDpClient; //存储请求装封
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _STEP_DATA_PROXY_EVENT_HPP_ */

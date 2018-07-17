@@ -13,7 +13,7 @@
 #include "PublicFunc.hpp"
 #include <enumeration.pb.h>
 
-namespace bsw
+namespace mg
 {
 
 DProxyBufferUser::DProxyBufferUser()
@@ -268,4 +268,4 @@ std::string DProxyBufferUser::DPROXY_BUFFER_UPDATE_USER_ONLINE_STATUS_IDENTIFY_D
     return oRedisOper.MakeMemOperate()->SerializeAsString();
 }
 
-} /* namespace bsw */
+} /* namespace mg */

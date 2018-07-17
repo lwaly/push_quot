@@ -14,7 +14,7 @@
 #include "StepDataProxyEvent.hpp"
 #include "ISyncDProxyProtocol.hpp"
 
-namespace bsw
+namespace mg
 {
 
 StepDataProxyEvent::StepDataProxyEvent(const CHttpContext& oInContext) 
@@ -125,4 +125,4 @@ oss::E_CMD_STATUS StepDataProxyEvent::CallbackLogic(common::errorinfo& oErrInfo,
     return oss::STATUS_CMD_RUNNING;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

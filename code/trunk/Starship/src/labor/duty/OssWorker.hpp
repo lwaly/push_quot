@@ -25,7 +25,6 @@
 #include "ev.h"
 #include "log4cplus/logger.h"
 #include "log4cplus/fileappender.h"
-#include "log4cplus/socketappender.h"
 #include "log4cplus/loggingmacros.h"
 #include "hiredis/hiredis.h"
 
@@ -240,6 +239,7 @@ namespace oss
         virtual bool SendToNodeType(const std::string& strNodeType, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
         virtual bool SendTo(const tagMsgShell& stMsgShell, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
         virtual bool SentTo(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
+        virtual bool SetClientType(const tagMsgShell& stMsgShell, uint32 uiType);
         virtual bool SetConnectIdentify(const tagMsgShell& stMsgShell, const std::string& strIdentify);
         virtual bool AutoSend(const std::string& strIdentify, const MsgHead& oMsgHead, const MsgBody& oMsgBody);
         virtual bool AutoSend(const std::string& strHost, int iPort, const std::string& strUrlPath, const HttpMsg& oHttpMsg, HttpStep* pHttpStep = NULL);
@@ -252,6 +252,7 @@ namespace oss
         virtual bool HadClientData(const tagMsgShell& stMsgShell);
         virtual bool GetClientData(const tagMsgShell& stMsgShell, loss::CBuffer* pBuff);
         virtual std::string GetClientAddr(const tagMsgShell& stMsgShell);
+        virtual uint32 GetClientType(const tagMsgShell& stMsgShell);
         virtual bool AbandonConnect(const std::string& strIdentify);
         virtual void ExecStep(uint32 uiCallerStepSeq, uint32 uiCalledStepSeq,
             int iErrno, const std::string& strErrMsg, const std::string& strErrShow);
@@ -318,6 +319,7 @@ namespace oss
         void ReloadModule(loss::CJsonObject& oUrlPaths);
         tagModule* LoadSoAndGetModule(const std::string& strModulePath, const std::string& strSoPath, const std::string& strSymbol, int iVersion);
         void UnloadSoAndDeleteModule(const std::string& strModulePath);
+
     private:
         char* m_pErrBuff;
         uint32 m_ulSequence;
@@ -370,6 +372,8 @@ namespace oss
         // std::map<std::string, std::set<std::string> > m_mapRedisNodeConf;        ///< redis节点配置，key为node_type，value为192.168.16.22:9988形式的IP+端口
         std::map<std::string, const redisAsyncContext*> m_mapRedisContext;       ///< redis连接，key为identify(192.168.16.22:9988形式的IP+端口)
         std::map<const redisAsyncContext*, std::string> m_mapContextIdentify;    ///< redis标识，与m_mapRedisContext的key和value刚好对调
+
+        std::vector<std::string> m_vecCenterIdentify; //记录中心的标识。
     };
 
 } /* namespace oss */

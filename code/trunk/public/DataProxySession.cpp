@@ -12,7 +12,7 @@
 
 #include "DataProxySession.hpp"
 
-namespace bsw
+namespace mg
 {
 
     DataProxySession::DataProxySession() : m_pLabor(NULL)

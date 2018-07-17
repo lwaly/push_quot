@@ -19,7 +19,7 @@
 
 #include "HttpUrlCoder.hpp"
 
-namespace bsw
+namespace mg
 {
     /// 十六进制对应的字符
     static unsigned char hexchars[] = "0123456789ABCDEF";

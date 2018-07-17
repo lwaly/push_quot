@@ -13,7 +13,7 @@
 #include "StepEx.hpp"
 #include "DProxyBufferUser.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class StepSyncAccess : public StepEx
@@ -185,6 +185,6 @@ private:
 	USER_STATUS_INFO m_tStatusInfo; //用户在线信息
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _STEP_SYNC_ACCESS_HPP_ */

@@ -79,9 +79,9 @@ namespace oss
             OssManager* pManager = (OssManager*)(watcher->data);
 #ifndef NODE_TYPE_CENTER
             pManager->ReportToCenter();
-#endif
             pManager->CheckWorker();
             pManager->RefreshServer();
+#endif
         }
         ev_timer_stop(loop, watcher);
         ev_timer_set(watcher, NODE_BEAT + ev_time() - ev_now(loop), 0);
@@ -132,7 +132,7 @@ namespace oss
 
         if (!GetConf())
         {
-            std::cerr << "GetConf() error! " << m_strConfFile << std::endl;
+            std::cerr << "GetConf() error!" << std::endl;
             exit(-1);
         }
         m_pErrBuff = new char[gc_iErrBuffLen];
@@ -705,35 +705,22 @@ namespace oss
             int32 iMaxLogFileSize = 0;
             int32 iMaxLogFileNum = 0;
             int32 iLogLevel = 0;
-            int32 iLoggingPort = 9000;
-            std::string strLoggingHost;
             std::string strLogname = oJsonConf("log_path") + std::string("/") + getproctitle() + std::string(".log");
             std::string strParttern = "[%D,%d{%q}][%p] [%l] %m%n";
-            std::ostringstream ssServerName;
-            ssServerName << getproctitle() << " " << m_strHostForServer << ":" << m_iPortForServer;
             oJsonConf.Get("max_log_file_size", iMaxLogFileSize);
             oJsonConf.Get("max_log_file_num", iMaxLogFileNum);
             oJsonConf.Get("log_level", iLogLevel);
             log4cplus::initialize();
-            std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
-            log4cplus::SharedAppenderPtr file_append(new log4cplus::RollingFileAppender(
+            log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender(
                 strLogname, iMaxLogFileSize, iMaxLogFileNum));
-            file_append->setName(strLogname);
-            file_append->setLayout(layout);
-            //log4cplus::Logger::getRoot().addAppender(file_append);
+            append->setName(strLogname);
+            std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
+            append->setLayout(layout);
+            //log4cplus::Logger::getRoot().addAppender(append);
             m_oLogger = log4cplus::Logger::getInstance(strLogname);
+            m_oLogger.addAppender(append);
             m_oLogger.setLogLevel(iLogLevel);
-            m_oLogger.addAppender(file_append);
-            if (oJsonConf.Get("socket_logging_host", strLoggingHost) && oJsonConf.Get("socket_logging_port", iLoggingPort))
-            {
-                log4cplus::SharedAppenderPtr socket_append(new log4cplus::SocketAppender(
-                    strLoggingHost, iLoggingPort, ssServerName.str()));
-                socket_append->setName(ssServerName.str());
-                socket_append->setLayout(layout);
-                socket_append->setThreshold(log4cplus::INFO_LOG_LEVEL);
-                m_oLogger.addAppender(socket_append);
-            }
-            LOG4_INFO("%s program begin, and work path %s...", oJsonConf("server_name").c_str(), m_strWorkPath.c_str());
+            LOG4_INFO("%s begin...", oJsonConf("server_name").c_str());
             m_bInitLogger = true;
             return(true);
         }
@@ -1042,7 +1029,6 @@ namespace oss
                 m_oCurrentConf.Get("access_port", m_iPortForClient);
                 m_oCurrentConf.Get("gateway", m_strGateway);
                 m_oCurrentConf.Get("gateway_port", m_iGatewayIp);
-
             }
             int32 iCodec;
             if (m_oCurrentConf.Get("access_codec", iCodec))
@@ -1081,28 +1067,25 @@ namespace oss
 
     bool OssManager::Init()
     {
-        /*
-           char szLogName[256] = {0};
-           snprintf(szLogName, sizeof(szLogName), "%s/log/%s.log", m_strWorkPath.c_str(), getproctitle());
-           std::string strParttern = "[%D,%d{%q}][%p] [%l] %m%n";
-           log4cplus::initialize();
-           log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender(
-           szLogName, atol(m_oCurrentConf("max_log_file_size").c_str()),
-           atoi(m_oCurrentConf("max_log_file_num").c_str())));
-           append->setName(szLogName);
-           std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
-           append->setLayout(layout);
-           //log4cplus::Logger::getRoot().addAppender(append);
-           m_oLogger = log4cplus::Logger::getInstance(szLogName);
-           m_oLogger.addAppender(append);
-           m_oLogger.setLogLevel(m_iLogLevel);
-           */
-        InitLogger(m_oCurrentConf);
+        char szLogName[256] = { 0 };
+        snprintf(szLogName, sizeof(szLogName), "%s/log/%s.log", m_strWorkPath.c_str(), getproctitle());
+        std::string strParttern = "[%D,%d{%q}][%p] [%l] %m%n";
+        log4cplus::initialize();
+        log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender(
+            szLogName, atol(m_oCurrentConf("max_log_file_size").c_str()),
+            atoi(m_oCurrentConf("max_log_file_num").c_str())));
+        append->setName(szLogName);
+        std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
+        append->setLayout(layout);
+        //log4cplus::Logger::getRoot().addAppender(append);
+        m_oLogger = log4cplus::Logger::getInstance(szLogName);
+        m_oLogger.addAppender(append);
+        m_oLogger.setLogLevel(m_iLogLevel);
+        LOG4_INFO("%s begin, and work path %s...", m_oCurrentConf("server_name").c_str(), m_strWorkPath.c_str());
 
         socklen_t addressLen = 0;
         int queueLen = 100;
         int reuse = 1;
-        int timeout = 1;
 
 #ifdef NODE_TYPE_ACCESS
         // 接入节点才需要监听客户端连接
@@ -1121,9 +1104,7 @@ namespace oss
             exit(iErrno);
         }
         reuse = 1;
-        timeout = 1;
         ::setsockopt(m_iC2SListenFd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
-        ::setsockopt(m_iC2SListenFd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &timeout, sizeof(int));
         if (bind(m_iC2SListenFd, pAddrOuter, addressLen) < 0)
         {
             LOG4_ERROR("error %d: %s", errno, strerror_r(errno, m_pErrBuff, 1024));
@@ -1157,9 +1138,7 @@ namespace oss
             exit(iErrno);
         }
         reuse = 1;
-        timeout = 1;
         ::setsockopt(m_iS2SListenFd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
-        ::setsockopt(m_iS2SListenFd, IPPROTO_TCP, TCP_DEFER_ACCEPT, &timeout, sizeof(int));
         if (bind(m_iS2SListenFd, pAddrInner, addressLen) < 0)
         {
             LOG4_ERROR("error %d: %s", errno, strerror_r(errno, m_pErrBuff, 1024));
@@ -1195,7 +1174,6 @@ namespace oss
                 strIdentify.c_str(), stMsgShell.iFd, stMsgShell.ulSeq);
             m_mapCenterMsgShell.insert(std::pair<std::string, tagMsgShell>(strIdentify, stMsgShell));
         }
-
 
         return(true);
     }
@@ -1322,11 +1300,11 @@ namespace oss
         ev_signal_start(m_loop, child_signal_watcher);
 
         /*
-           ev_signal* int_signal_watcher = new ev_signal();
-           ev_signal_init (int_signal_watcher, SignalCallback, SIGINT);
-           int_signal_watcher->data = (void*)this;
-           ev_signal_start (m_loop, int_signal_watcher);
-           */
+        ev_signal* int_signal_watcher = new ev_signal();
+        ev_signal_init (int_signal_watcher, SignalCallback, SIGINT);
+        int_signal_watcher->data = (void*)this;
+        ev_signal_start (m_loop, int_signal_watcher);
+        */
 
         ev_signal* ill_signal_watcher = new ev_signal();
         ev_signal_init(ill_signal_watcher, SignalCallback, SIGILL);
@@ -1360,7 +1338,6 @@ namespace oss
 
     bool OssManager::RegisterToCenter()
     {
-        LOG4_DEBUG("%s() , %d\n", __FUNCTION__, __LINE__);
         if (m_mapCenterMsgShell.size() == 0)
         {
             return(true);
@@ -1429,7 +1406,6 @@ namespace oss
         oReportData["node"].Add("send_byte", iSendByte);
         oReportData["node"].Add("client", iClientNum);
         oMsgBody.set_body(oReportData.ToString());
-        LOG4_DEBUG("%s, %d, CMD_REQ_NODE_REGISTER\n", __FILE__, __LINE__);
         oMsgHead.set_cmd(CMD_REQ_NODE_REGISTER);
         oMsgHead.set_seq(GetSequence());
         oMsgHead.set_msgbody_len(oMsgBody.ByteSize());
@@ -1438,7 +1414,6 @@ namespace oss
         {
             if (center_iter->second.iFd == 0)
             {
-                LOG4_DEBUG("%s, %d, CMD_REQ_NODE_REGISTER\n", __FILE__, __LINE__);
                 oMsgHead.set_cmd(CMD_REQ_NODE_REGISTER);
                 LOG4_TRACE("%s() cmd %d", __FUNCTION__, oMsgHead.cmd());
                 AutoSend(center_iter->first, oMsgHead, oMsgBody);
@@ -1486,15 +1461,15 @@ namespace oss
             {
                 LOG4_INFO("worker %d had been restarted %d times!", iWorkerIndex, restart_num_iter->second);
                 /*
-                   if (restart_num_iter->second >= 3)
-                   {
-                   LOG4_FATAL("worker %d had been restarted %d times, it will not be restart again!",
-                   iWorkerIndex, restart_num_iter->second);
-                   m_vecFreeWorkerIdx.push_back(iWorkerIndex);
-                   --m_uiWorkerNum;
-                   return(false);
-                   }
-                   */
+                if (restart_num_iter->second >= 3)
+                {
+                LOG4_FATAL("worker %d had been restarted %d times, it will not be restart again!",
+                iWorkerIndex, restart_num_iter->second);
+                m_vecFreeWorkerIdx.push_back(iWorkerIndex);
+                --m_uiWorkerNum;
+                return(false);
+                }
+                */
             }
 
             int iControlFds[2];
@@ -1555,7 +1530,7 @@ namespace oss
                 {
                     restart_num_iter->second++;
                 }
-                //RegisterToCenter();     // 重启Worker进程后向Center重发注册请求，以获得center下发其他节点的信息
+                RegisterToCenter();     // 重启Worker进程后向Center重发注册请求，以获得center下发其他节点的信息
                 return(true);
             }
             else
@@ -1569,15 +1544,15 @@ namespace oss
     bool OssManager::AddPeriodicTaskEvent()
     {
         LOG4_DEBUG("%s()", __FUNCTION__);
-        m_pPeriodicTaskWatcher = (ev_timer*)malloc(sizeof(ev_timer));
-        if (m_pPeriodicTaskWatcher == NULL)
+        ev_timer* timeout_watcher = new ev_timer();
+        if (timeout_watcher == NULL)
         {
             LOG4_ERROR("new timeout_watcher error!");
             return(false);
         }
-        ev_timer_init(m_pPeriodicTaskWatcher, PeriodicTaskCallback, NODE_BEAT + ev_time() - ev_now(m_loop), 0.);
-        m_pPeriodicTaskWatcher->data = (void*)this;
-        ev_timer_start(m_loop, m_pPeriodicTaskWatcher);
+        ev_timer_init(timeout_watcher, PeriodicTaskCallback, NODE_BEAT + ev_time() - ev_now(m_loop), 0.);
+        timeout_watcher->data = (void*)this;
+        ev_timer_start(m_loop, timeout_watcher);
         return(true);
     }
 
@@ -1878,8 +1853,8 @@ namespace oss
         {
             return(false);
         }
-        LOG4_DEBUG("%s() iter->second->pIoWatcher = 0x%x, fd %d, data 0x%x, iter->first:%d", __FUNCTION__,
-            iter->second->pIoWatcher, iter->second->pIoWatcher->fd, iter->second->pIoWatcher->data, iter->first);
+        LOG4_DEBUG("%s() iter->second->pIoWatcher = 0x%x, fd %d, data 0x%x", __FUNCTION__,
+            iter->second->pIoWatcher, iter->second->pIoWatcher->fd, iter->second->pIoWatcher->data);
         std::map<std::string, tagMsgShell>::iterator center_iter = m_mapCenterMsgShell.find(iter->second->strIdentify);
         if (center_iter != m_mapCenterMsgShell.end())
         {
@@ -1921,7 +1896,7 @@ namespace oss
 
     void OssManager::SetWorkerLoad(int iPid, loss::CJsonObject& oJsonLoad)
     {
-        LOG4_TRACE("%s()process(%d)", __FUNCTION__, iPid);
+        //LOG4_TRACE("%s()", __FUNCTION__);
         std::map<int, tagWorkerAttr>::iterator iter;
         iter = m_mapWorker.find(iPid);
         if (iter != m_mapWorker.end())
@@ -1965,13 +1940,13 @@ namespace oss
         for (worker_iter = m_mapWorker.begin();
             worker_iter != m_mapWorker.end(); ++worker_iter)
         {
-            LOG4_TRACE("now %lf, worker's dBeatTime %lf, worker_beat %d",
+            LOG4_TRACE("now %lf, worker_beat %lf, worker_beat %d",
                 ev_now(m_loop), worker_iter->second.dBeatTime, m_iWorkerBeat);
             if ((ev_now(m_loop) - worker_iter->second.dBeatTime) > m_iWorkerBeat)
             {
                 LOG4CPLUS_INFO_FMT(m_oLogger, "worker_%d pid %d is unresponsive, "
                     "terminate it.", worker_iter->second.iWorkerIndex, worker_iter->first);
-                kill(worker_iter->first, SIGKILL); //SIGINT);
+                kill(worker_iter->first, SIGINT);
                 //            RestartWorker(worker_iter->first);
             }
         }
@@ -2150,7 +2125,6 @@ namespace oss
         {
             if (m_oLastConf("log_level") != m_oCurrentConf("log_level"))
             {
-                LOG4_DEBUG("update log_level:(%s)", m_oCurrentConf("log_level").c_str());
                 m_oLogger.setLogLevel(m_iLogLevel);
                 MsgHead oMsgHead;
                 MsgBody oMsgBody;
@@ -2166,7 +2140,6 @@ namespace oss
             // 更新动态库配置或重新加载动态库
             if (m_oLastConf["so"].ToString() != m_oCurrentConf["so"].ToString())
             {
-                LOG4_DEBUG("update so:(%s)", m_oCurrentConf("so").c_str());
                 MsgHead oMsgHead;
                 MsgBody oMsgBody;
                 oMsgBody.set_body(m_oCurrentConf["so"].ToString());
@@ -2177,7 +2150,6 @@ namespace oss
             }
             if (m_oLastConf["module"].ToString() != m_oCurrentConf["module"].ToString())
             {
-                LOG4_DEBUG("update module:(%s)", m_oCurrentConf("module").c_str());
                 MsgHead oMsgHead;
                 MsgBody oMsgBody;
                 oMsgBody.set_body(m_oCurrentConf["module"].ToString());
@@ -2287,19 +2259,16 @@ namespace oss
         LOG4_TRACE("%s()：  %s", __FUNCTION__, oReportData.ToString().c_str());
 
         std::map<std::string, tagMsgShell>::iterator center_iter = m_mapCenterMsgShell.begin();
-        LOG4_DEBUG("%s, %d, m_mapCenterMsgShell size is %d\n", __FILE__, __LINE__, m_mapCenterMsgShell.size());
         for (; center_iter != m_mapCenterMsgShell.end(); ++center_iter)
         {
             if (center_iter->second.iFd == 0)
             {
-                LOG4_DEBUG("%s, %d, m_mapCenterMsgShell size is %d\n", __FILE__, __LINE__, m_mapCenterMsgShell.size());
                 oMsgHead.set_cmd(CMD_REQ_NODE_REGISTER);
                 LOG4_TRACE("%s() cmd %d", __FUNCTION__, oMsgHead.cmd());
                 AutoSend(center_iter->first, oMsgHead, oMsgBody);
             }
             else
             {
-                oMsgHead.set_cmd(CMD_REQ_NODE_STATUS_REPORT);
                 LOG4_TRACE("%s() cmd %d", __FUNCTION__, oMsgHead.cmd());
                 SendTo(center_iter->second, oMsgHead, oMsgBody);
             }
@@ -2411,68 +2380,65 @@ namespace oss
         }
         return(false);
     }
-
     bool OssManager::DisposeDataFromWorker(const tagMsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, loss::CBuffer* pSendBuff)
     {
         LOG4_DEBUG("%s(cmd %u, seq %u)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
         if (CMD_REQ_UPDATE_WORKER_LOAD == oInMsgHead.cmd())    // 新请求
         {
             std::map<int, int>::iterator iter = m_mapWorkerFdPid.find(stMsgShell.iFd);
-            LOG4_DEBUG("%s(cmd %u, seq %u, m_mapWorkerFdPid size is %d)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq(), m_mapWorkerFdPid.size());
             if (iter != m_mapWorkerFdPid.end())
             {
                 loss::CJsonObject oJsonLoad;
                 oJsonLoad.Parse(oInMsgBody.body());
-                LOG4_DEBUG("setWorkerLoad");
                 SetWorkerLoad(iter->second, oJsonLoad);
             }
-        }
-        else if (CMD_REQ_SERVER_CONFIG == oInMsgHead.cmd())
-        {
-            MsgHead oOutMsgHead;
-            MsgBody oOutMsgBody;
-            OrdinaryResponse oRes;
-            oRes.set_err_no(0);
-            oRes.set_err_msg("OK");
-            oOutMsgBody.set_body(oRes.SerializeAsString());
-            oOutMsgHead.set_cmd(oInMsgHead.cmd() + 1);
-            oOutMsgHead.set_seq(oInMsgHead.seq());
-            oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-            SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
-            SendToWorkerWithMod(0, oInMsgHead, oInMsgBody);//只要发给第一个worker,让其修改配置文件
-            m_iLastRefreshCalc = m_iRefreshInterval;//定时器到时时需要检查一次配置文件
+            else if (CMD_REQ_SERVER_CONFIG == oInMsgHead.cmd())
+            {
+                MsgHead oOutMsgHead;
+                MsgBody oOutMsgBody;
+                OrdinaryResponse oRes;
+                oRes.set_err_no(0);
+                oRes.set_err_msg("OK");
+                oOutMsgBody.set_body(oRes.SerializeAsString());
+                oOutMsgHead.set_cmd(oInMsgHead.cmd() + 1);
+                oOutMsgHead.set_seq(oInMsgHead.seq());
+                oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
+                SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
+                SendToWorkerWithMod(0, oInMsgHead, oInMsgBody);//只要发给第一个worker,让其修改配置文件
+                m_iLastRefreshCalc = m_iRefreshInterval;//定时器到时时需要检查一次配置文件
+                return(true);
+            }
+            else if (CMD_REQ_RELOAD_LOGIC_CONFIG == oInMsgHead.cmd())
+            {
+                MsgHead oOutMsgHead;
+                MsgBody oOutMsgBody;
+                OrdinaryResponse oRes;
+                oRes.set_err_no(0);
+                oRes.set_err_msg("OK");
+                oOutMsgBody.set_body(oRes.SerializeAsString());
+                oOutMsgHead.set_cmd(oInMsgHead.cmd() + 1);
+                oOutMsgHead.set_seq(oInMsgHead.seq());
+                oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
+                SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
+                SendToWorker(oInMsgHead, oInMsgBody);
+                return(true);
+            }
+            else if (CMD_REQ_NODE_STOP == oInMsgHead.cmd())
+            {
+                AddWaitToExitTaskEvent(stMsgShell, oInMsgHead.cmd(), oInMsgHead.seq());//退出节点
+                return(true);
+            }
+            else if (CMD_REQ_NODE_RESTART_WORKERS == oInMsgHead.cmd())
+            {
+                AddWaitToExitTaskEvent(stMsgShell, oInMsgHead.cmd(), oInMsgHead.seq());//重启工作者
+                return(true);
+            }
+            else
+            {
+                LOG4_WARN("unknow cmd %d from worker!", oInMsgHead.cmd());
+            }
             return(true);
         }
-        else if (CMD_REQ_RELOAD_LOGIC_CONFIG == oInMsgHead.cmd())
-        {
-            MsgHead oOutMsgHead;
-            MsgBody oOutMsgBody;
-            OrdinaryResponse oRes;
-            oRes.set_err_no(0);
-            oRes.set_err_msg("OK");
-            oOutMsgBody.set_body(oRes.SerializeAsString());
-            oOutMsgHead.set_cmd(oInMsgHead.cmd() + 1);
-            oOutMsgHead.set_seq(oInMsgHead.seq());
-            oOutMsgHead.set_msgbody_len(oOutMsgBody.ByteSize());
-            SendTo(stMsgShell, oOutMsgHead, oOutMsgBody);
-            SendToWorker(oInMsgHead, oInMsgBody);
-            return(true);
-        }
-        else if (CMD_REQ_NODE_STOP == oInMsgHead.cmd())
-        {
-            AddWaitToExitTaskEvent(stMsgShell, oInMsgHead.cmd(), oInMsgHead.seq());//退出节点
-            return(true);
-        }
-        else if (CMD_REQ_NODE_RESTART_WORKERS == oInMsgHead.cmd())
-        {
-            AddWaitToExitTaskEvent(stMsgShell, oInMsgHead.cmd(), oInMsgHead.seq());//重启工作者
-            return(true);
-        }
-        else
-        {
-            LOG4_WARN("unknow cmd %d from worker!", oInMsgHead.cmd());
-        }
-        return(true);
     }
 
     bool OssManager::DisposeDataAndTransferFd(const tagMsgShell& stMsgShell, const MsgHead& oInMsgHead, const MsgBody& oInMsgBody, loss::CBuffer* pSendBuff)

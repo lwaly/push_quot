@@ -11,7 +11,7 @@
 #ifndef _I_SYNC_DATA_PROXY_PROTOCOL_HPP_
 #define _I_SYNC_DATA_PROXY_PROTOCOL_HPP_
 
-namespace bsw
+namespace mg
 {
 
 enum
@@ -25,6 +25,6 @@ enum
 	CMD_RSP_ACCESS_TO_LOGIC          = 40002, //接入层转发到逻辑层回调
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _I_SYNC_DATA_PROXY_PROTOCOL_HPP_ */

@@ -8,7 +8,10 @@
 	"section_factor_enum":{"imid":1, "string":2},
     "relative":{"table":0, "dataset":1, "join":2},
     "redis_struct":{
+    "201":{"data_type":1, "section_factor":1, "ttl":0, "table":"quot_config","relative":1, "key_field":"id"}
     },
     "tables":{
+    "quot_config":{"data_type":1, "section_factor":1,
+            "cols":["id", "supports_search","supports_group_request","supported_resolutions","supports_marks","supports_time"]}
     }
 }

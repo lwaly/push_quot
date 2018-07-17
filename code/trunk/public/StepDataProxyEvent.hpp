@@ -15,7 +15,7 @@
 #include "DataProxyClient.hpp"
 #include "StepDataProxyEventBase.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class StepDataProxyEvent : public StepDataProxyEventBase
@@ -46,6 +46,6 @@ protected:
 	SessionUserInfo* m_pSysSession;   //系统用户 session
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _STEP_DATA_PROXY_EVENT_HPP_ */

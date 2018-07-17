@@ -12,7 +12,7 @@
 #include "DataProxyClient.hpp"
 #include "ISyncDProxyProtocol.hpp"
 
-namespace bsw
+namespace mg
 {
 
 DataProxyClient::DataProxyClient() 
@@ -198,4 +198,4 @@ uint32 DataProxyClient::AccessToLogic(uint32 uiReqCmd, const MsgBody& oMsgBody)
     return ERR_OK;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

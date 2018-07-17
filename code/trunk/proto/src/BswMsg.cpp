@@ -10,7 +10,7 @@
 
 #include "BswMsg.hpp"
 
-namespace bsw
+namespace mg
 {
 
 unsigned long long GetMsgId(unsigned short uiNodeId, unsigned char ucWorkerIndex)

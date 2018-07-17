@@ -12,7 +12,7 @@
 
 #define SESSION_VALID_TIME 300.0
 
-namespace bsw
+namespace mg
 {
 
 StepEx::StepEx(const CContext& oInContext) 
@@ -95,7 +95,7 @@ SessionUserInfo* StepEx::GetUserSession(uint32 uiUserID)
 	return pSession;
 }
 
-uint32 StepEx::RegisterSyncStep(bsw::StepEx* pStep)
+uint32 StepEx::RegisterSyncStep(mg::StepEx* pStep)
 {
 	if (NULL == pStep)
 	{
@@ -189,4 +189,4 @@ std::string StepEx::FormatString(const char* pString, ...)
 	return strFormat;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

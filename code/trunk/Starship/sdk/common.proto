@@ -1,0 +1,20 @@
+package common;
+
+//错误码
+message errorinfo
+{
+    required int32 error_code        = 1; // 错误码
+    optional bytes error_info        = 2; // 错误描述信息
+    optional bytes error_client_show = 3; // 客户端展示信息
+}
+
+//客户端信息
+message client_info
+{
+    required uint32 app_type                = 1; // 应用类型（填充枚举值 enumeration.E_APP_TYPE）
+	required uint32 client_type	            = 2; // 客户端类型(填充枚举值 enumeration.E_CLIENT_TYPE) 
+	required bytes version                  = 3; // 版本信息
+	required bytes deviceInfo               = 4; // 设备信息
+	required bytes ip                       = 5; // ip 地址信息 客户端的IP地址ipv4/ipv6:192.168.18.80/2001:db8:1a:1:eeb1:d7ff:fe84:1145/64
+}
+

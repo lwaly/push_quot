@@ -21,7 +21,7 @@ oss::Cmd* create();
 }
 #endif
 
-namespace bsw
+namespace mg
 {
 
 class CmdToClient: public oss::Cmd
@@ -38,6 +38,6 @@ public:
     StepToClient* pStepToClient;
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _CMD_TO_CLIENT_HPP_ */

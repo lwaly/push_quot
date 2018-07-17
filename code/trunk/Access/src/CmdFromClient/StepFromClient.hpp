@@ -13,7 +13,7 @@
 #include "BswError.h"
 #include "step/Step.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class StepFromClient: public oss::Step
@@ -34,6 +34,6 @@ public:
     virtual oss::E_CMD_STATUS Timeout();
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* SRC_CMDFROMCLIENT_STEPFROMCLIENT_HPP_ */

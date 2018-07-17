@@ -14,7 +14,7 @@
 #include <Public.hpp>
 #include "ModulePublic.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class ISyncEvent
@@ -30,6 +30,6 @@ public:
 	virtual void OnAccessToLogic(const common::errorinfo& oErrInfo, const CContext& oOutContext) {}
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _I_SYNC_EVENT_HPP_ */

@@ -14,7 +14,7 @@
 #include <cmd/Module.hpp>
 #include "HttpStepEx.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class ModuleEx : public oss::Module
@@ -26,16 +26,16 @@ public:
     virtual bool AnyMessage(const oss::tagMsgShell& stMsgShell, const HttpMsg& oInHttpMsg);
 	virtual bool AnyMessageLogic(common::errorinfo& oErrInfo, const CHttpContext& oInContext);
 
-	uint32 RegisterSyncStep(common::errorinfo& oErrInfo, bsw::HttpStepEx* pStep);
+	uint32 RegisterSyncStep(common::errorinfo& oErrInfo, mg::HttpStepEx* pStep);
 
 	bool GetCookieInfo(common::errorinfo& oErrInfo, const HttpMsg& oInHttpMsg, std::string& strToken, uint32& uiUserID);
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #define MODULE_CLASS_MAKE(ModuleClass, StepClass)	  \
 													  \
-namespace bsw										  \
+namespace mg										  \
 {													  \
 class ModuleClass : public ModuleEx					  \
 {													  \

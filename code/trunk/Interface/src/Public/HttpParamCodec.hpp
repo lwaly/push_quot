@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 
-namespace bsw
+namespace mg
 {
 
 class HttpParamCodec
@@ -79,6 +79,6 @@ private:
     std::map<std::string, std::string> m_mapCookie;
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _HTTP_PARAM_CODEC_HPP_ */

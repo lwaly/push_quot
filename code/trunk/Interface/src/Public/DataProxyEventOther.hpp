@@ -14,7 +14,7 @@
 #include <common.pb.h>
 #include "ISyncEvent.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class DataProxyEventOther
@@ -36,6 +36,6 @@ private:
 	ISyncEvent* m_pSyncEvent; //事件基类，用于回调
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _DATA_PROXY_EVENT_OTHER_HPP_ */

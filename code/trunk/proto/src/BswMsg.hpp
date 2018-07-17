@@ -12,7 +12,7 @@
 
 #include <time.h>
 
-namespace bsw
+namespace mg
 {
 
 const unsigned long long gc_ullSecondBit = 0xFFFFFFFF80000000ULL;

@@ -11,7 +11,7 @@
 #include <sstream>
 #include "Public.hpp"
 
-namespace bsw
+namespace mg
 {
 
 std::string FormatString(const char* pString, ...)
@@ -42,4 +42,4 @@ std::string Int64ToString(uint64 uiValue)
 	return ss.str();
 }
 
-} /* namespace bsw */
+} /* namespace mg */

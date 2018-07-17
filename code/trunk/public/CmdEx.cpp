@@ -10,7 +10,7 @@
 #include "CmdEx.hpp"
 #include <enumeration.pb.h>
 
-namespace bsw
+namespace mg
 {
 
 CmdEx::CmdEx()
@@ -41,7 +41,7 @@ bool CmdEx::AnyMessageLogic(common::errorinfo& oErrInfo, const CContext& oInCont
 	return true;
 }
 
-uint32 CmdEx::RegisterSyncStep(bsw::StepEx* pStep)
+uint32 CmdEx::RegisterSyncStep(mg::StepEx* pStep)
 {
 	if (NULL == pStep)
 	{
@@ -66,7 +66,7 @@ uint32 CmdEx::RegisterSyncStep(bsw::StepEx* pStep)
 	return ERR_OK;
 }
 
-uint32 CmdEx::RegisterSyncStep(common::errorinfo& oErrInfo, bsw::StepEx* pStep)
+uint32 CmdEx::RegisterSyncStep(common::errorinfo& oErrInfo, mg::StepEx* pStep)
 {
 	if (NULL == pStep)
 	{
@@ -132,4 +132,4 @@ std::string CmdEx::FormatString(const char* pString, ...)
 	return strFormat;
 }
 
-} /* namespace bsw */
+} /* namespace mg */

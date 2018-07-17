@@ -11,11 +11,11 @@
 #include "SessionUserInfo.hpp"
 #include <enumeration.pb.h>
 
-namespace bsw
+namespace mg
 {
 
     SessionUserInfo::SessionUserInfo(uint32 ulSessionId, ev_tstamp dSessionTimeout/* = 60.*/)
-        : Session(ulSessionId, dSessionTimeout, std::string("bsw::SessionUserInfo")),
+        : Session(ulSessionId, dSessionTimeout, std::string("mg::SessionUserInfo")),
         m_cLoadUserInfo(oss::SESSION_UNLOAD)
     {
     }
@@ -75,4 +75,4 @@ namespace bsw
     {
         return oss::STATUS_CMD_COMPLETED;
     }
-} /* namespace bsw */
+} /* namespace mg */

@@ -1,0 +1,45 @@
+syntax = "proto2";
+option optimize_for = LITE_RUNTIME;
+
+package protocol;
+
+message MsgHead
+{
+    required fixed32 cmd = 1 ;               	///< 命令字（压缩加密算法占高位1字节）
+    required fixed32 msgbody_len = 2;        	///< 消息体长度（单个消息体长度不能超过65535即8KB）
+    required fixed32 seq = 3;                	///< 序列号
+}
+
+/**
+ * @brief 消息体
+ * @note 消息体主体是body，所有业务逻辑内容均放在body里。session_id和session用于接入层路由，
+ * 两者只需要填充一个即可，首选session_id，当session_id用整型无法表达时才使用session。
+ */
+message MsgBody
+{
+    required bytes body         = 1;			///< 消息体主体
+    optional uint32 session_id  = 2;			///< 会话ID（单聊消息为接收者uid，个人信息修改为uid，群聊消息为groupid，群管理为groupid）
+    optional string session     = 3;			///< 会话ID（当session_id用整型无法表达时使用）
+    optional bytes additional   = 4;			///< 接入层附加的数据（客户端无须理会）
+}
+
+message errorinfo
+{
+    required int32 error_code        = 1; // 错误码
+    optional bytes error_info        = 2; // 错误描述信息
+}
+
+message QuotConfigGetReq
+{
+
+}
+
+message QuotConfigGetRes
+{
+    required errorinfo errinfo = 1;
+    optional bool supports_search = 2;          //是否支持检索	
+    optional bool supports_group_request = 3;   //是否支持商品集合检索	
+    optional string supported_resolutions = 4;  //分辨率数组
+    optional bool supports_marks = 5;           //是否支持K线标记
+    optional bool supports_time = 6;            //是否提供服务器时间
+}

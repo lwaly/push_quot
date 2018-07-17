@@ -16,7 +16,7 @@
 #include <common.pb.h>
 #include "SessionUserInfo.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class StepEx : public oss::Step
@@ -37,7 +37,7 @@ public:
 	SessionUserInfo* GetUserSession(uint32 uiUserID); 
 
 	//注册步骤
-	uint32 RegisterSyncStep(bsw::StepEx* pStep);
+	uint32 RegisterSyncStep(mg::StepEx* pStep);
 
 private:
 	virtual oss::E_CMD_STATUS Emit(int iErrno, const std::string& strErrMsg = "", const std::string& strErrShow = "");
@@ -56,6 +56,6 @@ protected:
 	CContext m_oInContext;
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _STEP_EX_HPP_ */

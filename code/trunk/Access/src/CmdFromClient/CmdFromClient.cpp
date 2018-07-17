@@ -15,14 +15,14 @@ extern "C" {
 #endif
 oss::Cmd* create()
 {
-    oss::Cmd* pCmd = new bsw::CmdFromClient();
+    oss::Cmd* pCmd = new mg::CmdFromClient();
     return(pCmd);
 }
 #ifdef __cplusplus
 }
 #endif
 
-namespace bsw
+namespace mg
 {
 
 CmdFromClient::CmdFromClient()
@@ -64,4 +64,4 @@ bool CmdFromClient::AnyMessage(
     }
 }
 
-} /* namespace bsw */
+} /* namespace mg */

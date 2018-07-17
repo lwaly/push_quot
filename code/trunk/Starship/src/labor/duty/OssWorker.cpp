@@ -130,9 +130,9 @@ namespace oss
         if (watcher->data != NULL)
         {
             OssWorker* pWorker = (OssWorker*)(watcher->data);
-
+#ifndef NODE_TYPE_CENTER
             pWorker->CheckParent();
-
+#endif
         }
         ev_timer_stop(loop, watcher);
         ev_timer_set(watcher, NODE_BEAT + ev_time() - ev_now(loop), 0);
@@ -240,14 +240,14 @@ namespace oss
         MsgHead oMsgHead;
         MsgBody oMsgBody;
         loss::CJsonObject oJsonLoad;
-        oJsonLoad.Add("load", int32(m_mapCallbackStep.size()));
+        oJsonLoad.Add("load", int32(m_mapFdAttr.size() + m_mapCallbackStep.size()));
         oJsonLoad.Add("connect", int32(m_mapFdAttr.size()));
         oJsonLoad.Add("recv_num", m_iRecvNum);
         oJsonLoad.Add("recv_byte", m_iRecvByte);
         oJsonLoad.Add("send_num", m_iSendNum);
         oJsonLoad.Add("send_byte", m_iSendByte);
         oJsonLoad.Add("client", int32(m_mapFdAttr.size() - m_mapInnerFd.size()));
-        // LOG4_TRACE("%s", oJsonLoad.ToString().c_str());
+        LOG4_TRACE("%s", oJsonLoad.ToString().c_str());
         oMsgBody.set_body(oJsonLoad.ToString());
         oMsgHead.set_cmd(CMD_REQ_UPDATE_WORKER_LOAD);
         oMsgHead.set_seq(GetSequence());
@@ -329,22 +329,17 @@ namespace oss
                 return(false);
             }
             conn_iter->second->pRecvBuff->Compact(8192);
-            LOG4_DEBUG("iReadLen1 is %d", iReadLen);
         read_again:
             iReadLen = conn_iter->second->pRecvBuff->ReadFD(pData->iFd, iErrno);
-            LOG4_DEBUG("iReadLen2 is %d", iReadLen);
             if (NULL == conn_iter->second->pRemoteAddr)
             {
-                LOG4_TRACE("recv from fd %d identify %s, data len %d codec %d",
-                    pData->iFd, conn_iter->second->strIdentify.c_str(),
-                    iReadLen, conn_iter->second->eCodecType);
+                LOG4_TRACE("recv from fd %d, data len %d codec %d",
+                    pData->iFd, iReadLen, conn_iter->second->eCodecType);
             }
             else
             {
-                LOG4_TRACE("recv from fd %d ip %s identify %s, data len %d codec %d",
-                    pData->iFd, conn_iter->second->pRemoteAddr,
-                    conn_iter->second->strIdentify.c_str(),
-                    iReadLen, conn_iter->second->eCodecType);
+                LOG4_TRACE("recv from fd %d ip %s, data len %d codec %d",
+                    pData->iFd, conn_iter->second->pRemoteAddr, iReadLen, conn_iter->second->eCodecType);
             }
             if (iReadLen > 0)
             {
@@ -372,21 +367,10 @@ namespace oss
                     E_CODEC_STATUS eCodecStatus = codec_iter->second->Decode(conn_iter->second->pRecvBuff, oInMsgHead, oInMsgBody);
                     if (CODEC_STATUS_OK == eCodecStatus)
                     {
-                        if (loss::CODEC_PROTOBUF == conn_iter->second->eCodecType)   // 连接尚未完成
+                        if (conn_iter->second->ucConnectStatus != CMD_RSP_TELL_WORKER
+                            && oInMsgHead.has_cmd())   // 连接尚未完成
                         {
-                            if (eConnectStatus_ok != conn_iter->second->ucConnectStatus)
-                            {
-                                LOG4_DEBUG("oInMsgHead.cmd(%u),ucConnectStatus(%u)",
-                                    oInMsgHead.cmd(), conn_iter->second->ucConnectStatus);
-                                if (CMD_RSP_TELL_WORKER == oInMsgHead.cmd())
-                                {
-                                    conn_iter->second->ucConnectStatus = eConnectStatus_ok;
-                                }
-                                else if (CMD_RSP_TELL_WORKER > oInMsgHead.cmd())
-                                {
-                                    conn_iter->second->ucConnectStatus = eConnectStatus_connecting;
-                                }
-                            }
+                            conn_iter->second->ucConnectStatus = (unsigned char)oInMsgHead.cmd();
                         }
                         ++m_iRecvNum;
                         conn_iter->second->dActiveTime = ev_now(m_loop);
@@ -405,7 +389,7 @@ namespace oss
                                         conn_iter->second->pClientData->ReadableBytes());
                                     oInMsgHead.set_msgbody_len(oInMsgBody.ByteSize());
                                 }
-                                else// 如果是http短连接，则不会含oInMsgHead.cmd()，也不需要验证
+                                else //if (loss::CODEC_HTTP != conn_iter->second->eCodecType) // 如果是http短连接，则不需要验证，满足上面的(oInMsgHead.cmd() != 0)条件的话不需要再做此检查
                                 {
                                     // 如果是websocket连接，则需要验证连接
                                     if (loss::CODEC_WEBSOCKET_JSON == conn_iter->second->eCodecType)
@@ -421,7 +405,7 @@ namespace oss
                                     else
                                     {
                                         std::map<int, uint32>::iterator inner_iter = m_mapInnerFd.find(stMsgShell.iFd);
-                                        if (inner_iter == m_mapInnerFd.end() && conn_iter->second->ulMsgNum > 1)   // 未经账号验证的客户端连接发送数据过来，直接断开
+                                        if (inner_iter == m_mapInnerFd.end() && conn_iter->second->ulMsgNum < 0)   // 未经账号验证的客户端连接发送数据过来，直接断开
                                         {
                                             LOG4_DEBUG("invalid request, please login first!");
                                             DestroyConnect(conn_iter);
@@ -430,7 +414,7 @@ namespace oss
                                     }
                                 }
                             }
-                            else// 如果是http短连接，则不会含oInMsgHead.cmd()，也不需要验证
+                            else //if (loss::CODEC_HTTP != conn_iter->second->eCodecType) // 如果是http短连接，则不需要验证，满足上面的(oInMsgHead.cmd() != 0)条件的话不需要再做此检查
                             {
                                 if (loss::CODEC_WEBSOCKET_JSON == conn_iter->second->eCodecType) // 如果是websocket连接，则需要验证连接
                                 {
@@ -454,6 +438,7 @@ namespace oss
                                 }
                             }
 #endif
+
                             if ((gc_uiCmdReq & oInMsgHead.cmd()) && oInMsgHead.has_seq())
                             {
                                 conn_iter->second->ulForeignSeq = oInMsgHead.seq();
@@ -490,7 +475,7 @@ namespace oss
                                 }
                             }
                         }
-                        else  // url方式的http请求
+                        else            // url方式的http请求
                         {
                             HttpMsg oInHttpMsg;
                             HttpMsg oOutHttpMsg;
@@ -626,7 +611,7 @@ namespace oss
                         pData->iFd, iErrno, strerror_r(iErrno, m_pErrBuff, gc_iErrBuffLen));
                     if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)
                     {
-                        LOG4_DEBUG("if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd), pData->iFd = %d,  m_iManagerDataFd = %d , m_iManagerControlFd  = %d\n", pData->iFd, m_iManagerDataFd, m_iManagerControlFd);
+                        LOG4_DEBUG("if (pData->iFd != m_iManagerControlFd && pData->iFd != m_iManagerDataFd)");
                         DestroyConnect(conn_iter);
                     }
                 }
@@ -1024,10 +1009,8 @@ namespace oss
                     step_iter != attr_iter->second->listWaitData.end(); ++step_iter)
                 {
                     RedisStep* pRedisStep = (RedisStep*)(*step_iter);
-                    if (STATUS_CMD_RUNNING != pRedisStep->Callback(c, status, NULL))
-                    {
-                        delete pRedisStep;
-                    }
+                    pRedisStep->Callback(c, status, NULL);
+                    delete pRedisStep;
                 }
                 attr_iter->second->listWaitData.clear();
                 delete attr_iter->second;
@@ -1326,7 +1309,6 @@ namespace oss
             callback_iter = m_mapCallbackStep.find(*step_seq_iter);
             if (callback_iter == m_mapCallbackStep.end())
             {
-                LOG4_TRACE("try to erase seq[%u] from pStep->m_setPreStepSeq", *step_seq_iter);
                 pStep->m_setPreStepSeq.erase(step_seq_iter++);
             }
             else
@@ -1382,7 +1364,7 @@ namespace oss
 
     bool OssWorker::RegisterCallback(Session* pSession)
     {
-        LOG4_TRACE("%s(Session* 0x%X, lifetime %lf)", __FUNCTION__, &pSession, pSession->GetTimeout());
+        LOG4_TRACE("%s(Session* 0x%X, lifetime %lf)", __FUNCTION__, pSession, pSession->GetTimeout());
         if (pSession == NULL)
         {
             return(false);
@@ -1406,11 +1388,6 @@ namespace oss
         }
         else
         {
-            std::map<std::string, Session*>::iterator id_iter = name_iter->second.find(pSession->GetSessionId());
-            if (id_iter != name_iter->second.end())
-            {
-                LOG4_ERROR("session exist!(session_id %s[ %s ])", pSession->GetSessionClass().c_str(), pSession->GetSessionId().c_str());
-            }
             ret = name_iter->second.insert(std::pair<std::string, Session*>(pSession->GetSessionId(), pSession));
         }
         if (ret.second)
@@ -1434,7 +1411,7 @@ namespace oss
 
     void OssWorker::DeleteCallback(Session* pSession)
     {
-        LOG4_TRACE("%s(Session* 0x%X)", __FUNCTION__, &pSession);
+        LOG4_TRACE("%s(Session* 0x%X)", __FUNCTION__, pSession);
         if (pSession == NULL)
         {
             return;
@@ -1462,16 +1439,12 @@ namespace oss
         LOG4_TRACE("%s()", __FUNCTION__);
         if (pRedisStep == NULL)
         {
-            LOG4_TRACE("%s() pRedisStep is NULL", __FUNCTION__);
             return(false);
         }
-        //如果从连接不上，再连接主的时候STEP已经注册过了，不能往下走，改为允许重复注册
-        /*
-          if (pRedisStep->IsRegistered())  // 已注册过，不必重复注册，不过认为本次注册成功
-          {
-          LOG4_TRACE("%s() pRedisStep is IsRegistered", __FUNCTION__);
-          return(true);
-          }*/
+        if (pRedisStep->IsRegistered())  // 已注册过，不必重复注册，不过认为本次注册成功
+        {
+            return(true);
+        }
         pRedisStep->SetLabor(this);
         pRedisStep->SetLogger(&m_oLogger);
         pRedisStep->SetRegistered();
@@ -1716,6 +1689,17 @@ namespace oss
         }
         m_pCmdConnect->SetLogger(&m_oLogger);
         m_pCmdConnect->SetLabor(this);
+
+        //get center identify
+        for (int i = 0; i < oJsonConf["center"].GetArraySize(); ++i)
+        {
+            std::string strIdentify = oJsonConf["center"][i]("host") + std::string(":")
+                + oJsonConf["center"][i]("port") + std::string(".0");     // CenterServer只有一个Worker
+
+            LOG4_TRACE("center identify = %s", strIdentify.c_str());
+            m_vecCenterIdentify.push_back(strIdentify);
+        }
+
         return(true);
     }
 
@@ -1733,13 +1717,9 @@ namespace oss
             int32 iMaxLogFileSize = 0;
             int32 iMaxLogFileNum = 0;
             int32 iLogLevel = 0;
-            int32 iLoggingPort = 9000;
-            std::string strLoggingHost;
             std::string strLogname = m_strWorkPath + std::string("/") + oJsonConf("log_path")
                 + std::string("/") + getproctitle() + std::string(".log");
             std::string strParttern = "[%D,%d{%q}][%p] [%l] %m%n";
-            std::ostringstream ssServerName;
-            ssServerName << getproctitle() << " " << GetWorkerIdentify();
             oJsonConf.Get("max_log_file_size", iMaxLogFileSize);
             oJsonConf.Get("max_log_file_num", iMaxLogFileNum);
             if (oJsonConf.Get("log_level", iLogLevel))
@@ -1767,24 +1747,15 @@ namespace oss
                 iLogLevel = log4cplus::INFO_LOG_LEVEL;
             }
             log4cplus::initialize();
-            std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
             log4cplus::SharedAppenderPtr append(new log4cplus::RollingFileAppender(
                 strLogname, iMaxLogFileSize, iMaxLogFileNum));
             append->setName(strLogname);
+            std::auto_ptr<log4cplus::Layout> layout(new log4cplus::PatternLayout(strParttern));
             append->setLayout(layout);
             m_oLogger = log4cplus::Logger::getInstance(LOG4CPLUS_TEXT(strLogname));
-            m_oLogger.setLogLevel(iLogLevel);
             m_oLogger.addAppender(append);
-            if (oJsonConf.Get("socket_logging_host", strLoggingHost) && oJsonConf.Get("socket_logging_port", iLoggingPort))
-            {
-                log4cplus::SharedAppenderPtr socket_append(new log4cplus::SocketAppender(
-                    strLoggingHost, iLoggingPort, ssServerName.str()));
-                socket_append->setName(ssServerName.str());
-                socket_append->setLayout(layout);
-                socket_append->setThreshold(log4cplus::TRACE_LOG_LEVEL);
-                m_oLogger.addAppender(socket_append);
-            }
-            LOG4_INFO("%s program begin...", getproctitle());
+            m_oLogger.setLogLevel(iLogLevel);
+            LOG4_INFO("%s begin...", getproctitle());
             m_bInitLogger = true;
             return(true);
         }
@@ -1993,13 +1964,19 @@ namespace oss
     void OssWorker::DelMsgShell(const std::string& strIdentify)
     {
         std::map<std::string, tagMsgShell>::iterator shell_iter = m_mapMsgShell.find(strIdentify);
-        if (shell_iter == m_mapMsgShell.end())
-        {
-            ;
-        }
-        else
+        if (shell_iter != m_mapMsgShell.end())
         {
             m_mapMsgShell.erase(shell_iter);
+        }
+
+        //center server offline no refresh node id.
+        std::vector<std::string>::iterator identify_iter = m_vecCenterIdentify.begin();
+        for (; identify_iter != m_vecCenterIdentify.end(); identify_iter++)
+        {
+            if (*identify_iter == strIdentify)
+            {
+                DelNodeIdentify("", strIdentify);
+            }
         }
 
         // 连接虽然断开，但不应清除节点标识符，这样可以保证下次有数据发送时可以重新建立连接
@@ -2025,21 +2002,19 @@ namespace oss
     {
         LOG4_TRACE("%s(%s, %s)", __FUNCTION__, strNodeType.c_str(), strIdentify.c_str());
         std::map<std::string, std::string>::iterator iter = m_mapIdentifyNodeType.find(strIdentify);
-        LOG4_TRACE("m_mapIdentifyNode size(): %d; m_mapNodeIdentify  size: %d!", m_mapIdentifyNodeType.size(), m_mapIdentifyNodeType.size());
         if (iter == m_mapIdentifyNodeType.end())
         {
-            m_mapIdentifyNodeType.insert(iter,
-                std::pair<std::string, std::string>(strIdentify, strNodeType));
+            m_mapIdentifyNodeType.insert(iter, std::pair<std::string, std::string>(strIdentify, strNodeType));
 
             T_MAP_NODE_TYPE_IDENTIFY::iterator node_type_iter;
             node_type_iter = m_mapNodeIdentify.find(strNodeType);
             if (node_type_iter == m_mapNodeIdentify.end())
             {
-                std::set<std::string, std::less<std::string> > setIdentify;
+                std::set<std::string> setIdentify;
                 setIdentify.insert(strIdentify);
                 std::pair<T_MAP_NODE_TYPE_IDENTIFY::iterator, bool> insert_node_result;
                 insert_node_result = m_mapNodeIdentify.insert(std::pair< std::string,
-                    std::pair<std::set<std::string>::iterator, std::set<std::string, std::less<std::string> > > >(
+                    std::pair<std::set<std::string>::iterator, std::set<std::string> > >(
                     strNodeType, std::make_pair(setIdentify.begin(), setIdentify)));    //这里的setIdentify是临时变量，setIdentify.begin()将会成非法地址
                 if (insert_node_result.second == false)
                 {
@@ -2251,49 +2226,27 @@ namespace oss
                     DestroyConnect(conn_iter);
                     return(false);
                 }
+                LOG4_TRACE("connect status %u", conn_iter->second->ucConnectStatus);
                 E_CODEC_STATUS eCodecStatus = CODEC_STATUS_OK;
-                if (loss::CODEC_PROTOBUF == conn_iter->second->eCodecType)//内部协议需要检查连接过程
+                if (conn_iter->second->ucConnectStatus < CMD_RSP_TELL_WORKER)   // 连接尚未完成
                 {
-                    LOG4_TRACE("connect status %u", conn_iter->second->ucConnectStatus);
-                    if (eConnectStatus_ok != conn_iter->second->ucConnectStatus)   // 连接尚未完成
+                    if (oMsgHead.cmd() <= CMD_RSP_TELL_WORKER)   // 创建连接的过程
                     {
-                        if (oMsgHead.cmd() <= CMD_RSP_TELL_WORKER)   // 创建连接的过程
-                        {
-                            LOG4_TRACE("codec_iter->second->Encode,oMsgHead.cmd(%u),connect status %u",
-                                oMsgHead.cmd(), conn_iter->second->ucConnectStatus);
-                            eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pSendBuff);
-                            if (oMsgHead.cmd() == CMD_RSP_TELL_WORKER)
-                            {
-                                conn_iter->second->ucConnectStatus = eConnectStatus_ok;
-                            }
-                            else
-                            {
-                                conn_iter->second->ucConnectStatus = eConnectStatus_connecting;
-                            }
-                        }
-                        else    // 创建连接过程中的其他数据发送请求
-                        {
-                            LOG4_TRACE("codec_iter->second->Encode,oMsgHead.cmd(%u),connect status %u",
-                                oMsgHead.cmd(), conn_iter->second->ucConnectStatus);
-                            eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pWaitForSendBuff);
-                            if (CODEC_STATUS_OK == eCodecStatus)//其他请求在连接过程中先不发送
-                            {
-                                return(true);
-                            }
-                            return(false);
-                        }
+                        E_CODEC_STATUS eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pSendBuff);
+                        conn_iter->second->ucConnectStatus = (unsigned char)oMsgHead.cmd();
                     }
-                    else//连接已完成
+                    else    // 创建连接过程中的其他数据发送请求
                     {
-                        LOG4_TRACE("codec_iter->second->Encode,oMsgHead.cmd(%u),connect status %u",
-                            oMsgHead.cmd(), conn_iter->second->ucConnectStatus);
-                        eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pSendBuff);
+                        E_CODEC_STATUS eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pWaitForSendBuff);
+                        if (CODEC_STATUS_OK == eCodecStatus)
+                        {
+                            return(true);
+                        }
+                        return(false);
                     }
                 }
                 else
                 {
-                    LOG4_TRACE("codec_iter->second->Encode,oMsgHead.cmd(%u),connect status %u",
-                        oMsgHead.cmd(), conn_iter->second->ucConnectStatus);
                     eCodecStatus = codec_iter->second->Encode(oMsgHead, oMsgBody, conn_iter->second->pSendBuff);
                 }
                 if (CODEC_STATUS_OK == eCodecStatus)
@@ -2303,15 +2256,13 @@ namespace oss
                     int iNeedWriteLen = (int)conn_iter->second->pSendBuff->ReadableBytes();
                     if (NULL == conn_iter->second->pRemoteAddr)
                     {
-                        LOG4_TRACE("try send cmd[%d] seq[%lu] len %d to fd %d, identify %s",
-                            oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, stMsgShell.iFd,
-                            conn_iter->second->strIdentify.c_str());
+                        LOG4_TRACE("try send cmd[%d] seq[%lu] len %d to fd %d",
+                            oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, stMsgShell.iFd);
                     }
                     else
                     {
-                        LOG4_TRACE("try send cmd[%d] seq[%lu] len %d to fd %d ip %s identify %s",
-                            oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, stMsgShell.iFd,
-                            conn_iter->second->pRemoteAddr, conn_iter->second->strIdentify.c_str());
+                        LOG4_TRACE("try send cmd[%d] seq[%lu] len %d to fd %d ip %s",
+                            oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, stMsgShell.iFd, conn_iter->second->pRemoteAddr);
                     }
                     int iWriteLen = conn_iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
                     conn_iter->second->pSendBuff->Compact(8192);
@@ -2345,10 +2296,8 @@ namespace oss
                         conn_iter->second->dActiveTime = ev_now(m_loop);
                         if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                         {
-                            LOG4_TRACE("cmd[%d] seq[%lu] to fd %d ip %s identify %s need write %d and had written len %d",
-                                oMsgHead.cmd(), oMsgHead.seq(), stMsgShell.iFd,
-                                conn_iter->second->pRemoteAddr, conn_iter->second->strIdentify.c_str(),
-                                iNeedWriteLen, iWriteLen);
+                            LOG4_TRACE("cmd[%d] seq[%lu] need write %d and had written len %d",
+                                oMsgHead.cmd(), oMsgHead.seq(), iNeedWriteLen, iWriteLen);
                             RemoveIoWriteEvent(conn_iter);
                         }
                         else    // 内容未写完，添加或保持监听fd写事件
@@ -2362,8 +2311,6 @@ namespace oss
                 }
                 else
                 {
-                    LOG4_WARN("codec_iter->second->Encode failed,oMsgHead.cmd(%u),connect status %u",
-                        oMsgHead.cmd(), conn_iter->second->ucConnectStatus);
                     return(false);
                 }
             }
@@ -2398,7 +2345,6 @@ namespace oss
         node_type_iter = m_mapNodeIdentify.find(strNodeType);
         if (node_type_iter == m_mapNodeIdentify.end())
         {
-            LOG4_ERROR(" MsgShell match number: %d!", m_mapNodeIdentify.size());
             LOG4_ERROR("no MsgShell match %s!", strNodeType.c_str());
             return(false);
         }
@@ -2450,9 +2396,7 @@ namespace oss
                 std::set<std::string>::iterator id_iter;
                 int target_identify = uiModFactor % node_type_iter->second.second.size();
                 int i = 0;
-                for (i = 0, id_iter = node_type_iter->second.second.begin();
-                    i < node_type_iter->second.second.size();
-                    ++i, ++id_iter)
+                for (i = 0, id_iter = node_type_iter->second.second.begin(); i < node_type_iter->second.second.size(); ++i, ++id_iter)
                 {
                     if (i == target_identify && id_iter != node_type_iter->second.second.end())
                     {
@@ -2552,7 +2496,6 @@ namespace oss
                     {   // 正在监听fd的写事件，说明发送缓冲区满，此时直接返回，等待EV_WRITE事件再执行WriteFD
                         return(true);
                     }
-                    LOG4_TRACE("fd[%d], seq[%u], conn_iter->second->pSendBuff 0x%x", stMsgShell.iFd, stMsgShell.ulSeq, conn_iter->second->pSendBuff);
                     int iErrno = 0;
                     int iNeedWriteLen = (int)conn_iter->second->pSendBuff->ReadableBytes();
                     int iWriteLen = conn_iter->second->pSendBuff->WriteFD(stMsgShell.iFd, iErrno);
@@ -2610,7 +2553,6 @@ namespace oss
                         conn_iter->second->dActiveTime = ev_now(m_loop);
                         if (iWriteLen == iNeedWriteLen)  // 已无内容可写，取消监听fd写事件
                         {
-                            LOG4_TRACE("need write len %d, and had writen len %d", iNeedWriteLen, iWriteLen);
                             RemoveIoWriteEvent(conn_iter);
                         }
                         else    // 内容未写完，添加或保持监听fd写事件
@@ -3142,6 +3084,39 @@ namespace oss
         }
     }
 
+    bool OssWorker::SetClientType(const tagMsgShell& stMsgShell, uint32 uiType)
+    {
+        LOG4_TRACE(__FUNCTION__);
+        std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
+        if (iter == m_mapFdAttr.end())
+        {
+            LOG4_ERROR("no fd %d found in m_mapFdAttr", stMsgShell.iFd);
+            return(false);
+        }
+
+        if (iter->second->ulSeq != stMsgShell.ulSeq)
+        {
+            LOG4_ERROR("fd %d sequence %lu not match the sequence %lu in m_mapFdAttr",
+                stMsgShell.iFd, stMsgShell.ulSeq, iter->second->ulSeq);
+            return(false);
+        }
+
+        iter->second->uiType = uiType;
+        return(true);
+    }
+
+    uint32 OssWorker::GetClientType(const tagMsgShell& stMsgShell)
+    {
+        LOG4_TRACE("%s()", __FUNCTION__);
+        std::map<int, tagConnectionAttr*>::iterator iter = m_mapFdAttr.find(stMsgShell.iFd);
+        if (iter == m_mapFdAttr.end()
+            || iter->second->ulSeq != stMsgShell.ulSeq
+            || NULL == iter->second->pRemoteAddr)
+            return 0;
+
+        return iter->second->uiType;
+    }
+
     bool OssWorker::AbandonConnect(const std::string& strIdentify)
     {
         LOG4_TRACE("%s(identify: %s)", __FUNCTION__, strIdentify.c_str());
@@ -3206,7 +3181,7 @@ namespace oss
 
     void OssWorker::LoadSo(loss::CJsonObject& oSoConf)
     {
-        LOG4_TRACE("%s():oSoConf(%s)", __FUNCTION__, oSoConf.ToString().c_str());
+        LOG4_TRACE("%s()", __FUNCTION__);
         int iCmd = 0;
         int iVersion = 0;
         bool bIsload = false;
@@ -3218,32 +3193,24 @@ namespace oss
             oSoConf[i].Get("load", bIsload);
             if (bIsload)
             {
-                strSoPath = m_strWorkPath + std::string("/") + oSoConf[i]("so_path");
                 if (oSoConf[i].Get("cmd", iCmd) && oSoConf[i].Get("version", iVersion))
                 {
                     cmd_iter = m_mapSo.find(iCmd);
                     if (cmd_iter == m_mapSo.end())
                     {
-                        if (0 != access(strSoPath.c_str(), F_OK))
-                        {
-                            LOG4_WARN("%s not exist!", strSoPath.c_str());
-                            continue;
-                        }
+                        strSoPath = m_strWorkPath + std::string("/") + oSoConf[i]("so_path");
                         pSo = LoadSoAndGetCmd(iCmd, strSoPath, oSoConf[i]("entrance_symbol"), iVersion);
                         if (pSo != NULL)
                         {
                             LOG4_INFO("succeed in loading %s", strSoPath.c_str());
                             m_mapSo.insert(std::pair<int, tagSo*>(iCmd, pSo));
                         }
-                        else
-                        {
-                            LOG4_WARN("failed to load %s", strSoPath.c_str());
-                        }
                     }
                     else
                     {
                         if (iVersion != cmd_iter->second->iVersion)
                         {
+                            strSoPath = m_strWorkPath + std::string("/") + oSoConf[i]("so_path");
                             if (0 != access(strSoPath.c_str(), F_OK))
                             {
                                 LOG4_WARN("%s not exist!", strSoPath.c_str());
@@ -3257,40 +3224,23 @@ namespace oss
                                 delete cmd_iter->second;
                                 cmd_iter->second = pSo;
                             }
-                            else
-                            {
-                                LOG4_WARN("failed to load %s", strSoPath.c_str());
-                            }
-                        }
-                        else
-                        {
-                            LOG4_INFO("same version(%d).no need  to load %s", cmd_iter->second->iVersion,
-                                strSoPath.c_str());
                         }
                     }
-                }
-                else
-                {
-                    LOG4_WARN("cmd or version not found.failed to load %s", strSoPath.c_str());
                 }
             }
             else        // 卸载动态库
             {
-                strSoPath = m_strWorkPath + std::string("/") + oSoConf[i]("so_path");
                 if (oSoConf[i].Get("cmd", iCmd))
                 {
-                    LOG4_INFO("unload %s", strSoPath.c_str());
+                    strSoPath = m_strWorkPath + std::string("/") + oSoConf[i]("so_path");
                     UnloadSoAndDeleteCmd(iCmd);
-                }
-                else
-                {
-                    LOG4_WARN("cmd not exist.failed to unload %s", strSoPath.c_str());
+                    LOG4_INFO("unload %s", strSoPath.c_str());
                 }
             }
         }
     }
-
-    void OssWorker::ReloadSo(loss::CJsonObject& oCmds)
+	
+	void OssWorker::ReloadSo(loss::CJsonObject& oCmds)
     {
         LOG4_WARN("OssWorker ReloadSo... ");
         LOG4_DEBUG("%s():oCmds(%s)", __FUNCTION__, oCmds.ToString().c_str());
@@ -3416,8 +3366,7 @@ namespace oss
         std::string strSoPath;
         std::map<std::string, tagModule*>::iterator module_iter;
         tagModule* pModule = NULL;
-        LOG4_TRACE("oModuleConf.GetArraySize() = %d,oModuleConf(%s)", oModuleConf.GetArraySize(),
-            oModuleConf.ToString().c_str());
+        LOG4_TRACE("oModuleConf.GetArraySize() = %d", oModuleConf.GetArraySize());
         for (int i = 0; i < oModuleConf.GetArraySize(); ++i)
         {
             oModuleConf[i].Get("load", bIsload);
@@ -3462,10 +3411,6 @@ namespace oss
                                 module_iter->second = pModule;
                             }
                         }
-                        else
-                        {
-                            LOG4_INFO("already exist same version:%s", strSoPath.c_str());
-                        }
                     }
                 }
             }
@@ -3480,8 +3425,8 @@ namespace oss
             }
         }
     }
-
-    void OssWorker::ReloadModule(loss::CJsonObject& oUrlPaths)
+	
+	void OssWorker::ReloadModule(loss::CJsonObject& oUrlPaths)
     {
         LOG4_TRACE("%s()", __FUNCTION__);
         std::map<std::string, tagModule*>::iterator module_iter;
@@ -4032,28 +3977,25 @@ namespace oss
         const MsgHead& oInMsgHead, const MsgBody& oInMsgBody,
         MsgHead& oOutMsgHead, MsgBody& oOutMsgBody)
     {
-        LOG4_DEBUG("%s(cmd %u, seq %lu)", __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
+        LOG4_DEBUG("%s(cmd %u, seq %lu)",
+            __FUNCTION__, oInMsgHead.cmd(), oInMsgHead.seq());
         OrdinaryResponse oRes;
         oOutMsgHead.Clear();
         oOutMsgBody.Clear();
-        LOG4_DEBUG("gc_uiCmdReq %d : oInMsgHead %d", gc_uiCmdReq, oInMsgHead.cmd());
         if (gc_uiCmdReq & oInMsgHead.cmd())    // 新请求
         {
             std::map<int32, Cmd*>::iterator cmd_iter;
             cmd_iter = m_mapCmd.find(gc_uiCmdBit & oInMsgHead.cmd());
             if (cmd_iter != m_mapCmd.end() && cmd_iter->second != NULL)
             {
-                LOG4_DEBUG("cmd_iter is end...");
                 cmd_iter->second->AnyMessage(stMsgShell, oInMsgHead, oInMsgBody);
             }
             else
             {
-                LOG4_DEBUG("cmd is not end");
                 std::map<int, tagSo*>::iterator cmd_so_iter;
                 cmd_so_iter = m_mapSo.find(gc_uiCmdBit & oInMsgHead.cmd());
                 if (cmd_so_iter != m_mapSo.end() && cmd_so_iter->second != NULL)
                 {
-                    LOG4_DEBUG("cmd2 is not end");
                     cmd_so_iter->second->pCmd->AnyMessage(stMsgShell, oInMsgHead, oInMsgBody);
                 }
                 else        // 没有对应的cmd，是需由接入层转发的请求
@@ -4129,13 +4071,11 @@ namespace oss
                             cmd_so_iter = m_mapSo.find(CMD_REQ_TO_CLIENT);
                             if (cmd_so_iter != m_mapSo.end())
                             {
-                                LOG4_WARN("Node_Type_ACCESS  gc_uiCmdReq  cmd_iter->second->AnyMseege: %d", m_mapCmd.size());
                                 cmd_so_iter->second->pCmd->AnyMessage(stMsgShell, oInMsgHead, oInMsgBody);
                             }
                             else
                             {
-                                LOG4_DEBUG("%s, %d CMD_RSP_SYS_ERROR\n", __FUNCTION__, __LINE__);
-                                snprintf(m_pErrBuff, gc_iErrBuffLen, " no handler to dispose cmd %u!", oInMsgHead.cmd());
+                                snprintf(m_pErrBuff, gc_iErrBuffLen, "no handler to dispose cmd %u!", oInMsgHead.cmd());
                                 LOG4_ERROR(m_pErrBuff);
                                 oRes.set_err_no(ERR_UNKNOWN_CMD);
                                 oRes.set_err_msg(m_pErrBuff);
@@ -4154,8 +4094,7 @@ namespace oss
                             }
                             else
                             {
-                                LOG4_DEBUG("%s, %d CMD_RSP_SYS_ERROR \n", __FUNCTION__, __LINE__);
-                                snprintf(m_pErrBuff, gc_iErrBuffLen, " no handler to dispose cmd %u!", oInMsgHead.cmd());
+                                snprintf(m_pErrBuff, gc_iErrBuffLen, "no handler to dispose cmd %u!", oInMsgHead.cmd());
                                 LOG4_ERROR(m_pErrBuff);
                                 oRes.set_err_no(ERR_UNKNOWN_CMD);
                                 oRes.set_err_msg(m_pErrBuff);
@@ -4166,8 +4105,7 @@ namespace oss
                             }
                         }
 #else
-                        LOG4_DEBUG("%s, %d , %d CMD_RSP_SYS_ERROR\n", __FUNCTION__, __LINE__, oInMsgHead.cmd());
-                        snprintf(m_pErrBuff, gc_iErrBuffLen, " no handler to dispose cmd %u!", oInMsgHead.cmd());
+                        snprintf(m_pErrBuff, gc_iErrBuffLen, "no handler to dispose cmd %u!", oInMsgHead.cmd());
                         LOG4_ERROR(m_pErrBuff);
                         oRes.set_err_no(ERR_UNKNOWN_CMD);
                         oRes.set_err_msg(m_pErrBuff);
@@ -4244,24 +4182,28 @@ namespace oss
             module_iter = m_mapModule.find(oInHttpMsg.path());
             if (module_iter == m_mapModule.end())
             {
-                module_iter = m_mapModule.find("/im/switch");
-                if (module_iter == m_mapModule.end())
-                {
-                    snprintf(m_pErrBuff, gc_iErrBuffLen, "no module to dispose %s!", oInHttpMsg.path().c_str());
-                    LOG4_ERROR(m_pErrBuff);
-                    oOutHttpMsg.set_type(HTTP_RESPONSE);
-                    oOutHttpMsg.set_status_code(404);
-                    oOutHttpMsg.set_http_major(oInHttpMsg.http_major());
-                    oOutHttpMsg.set_http_minor(oInHttpMsg.http_minor());
-                }
-                else
-                {
-                    module_iter->second->pModule->AnyMessage(stMsgShell, oInHttpMsg);
-                }
+                snprintf(m_pErrBuff, gc_iErrBuffLen, "no module to dispose %s!", oInHttpMsg.path().c_str());
+                LOG4_ERROR(m_pErrBuff);
+                oOutHttpMsg.set_type(HTTP_RESPONSE);
+                oOutHttpMsg.set_status_code(404);
+                oOutHttpMsg.set_http_major(oInHttpMsg.http_major());
+                oOutHttpMsg.set_http_minor(oInHttpMsg.http_minor());
             }
             else
             {
                 module_iter->second->pModule->AnyMessage(stMsgShell, oInHttpMsg);
+                //--------------------------------------------------------------------------------------
+                //                        HttpMsg oHttpMsg;
+                //                        oHttpMsg.set_type(HTTP_RESPONSE);
+                //                        oHttpMsg.set_http_major(1);
+                //                        oHttpMsg.set_http_minor(1);
+                //                        oHttpMsg.set_status_code(200);
+                //                        HttpMsg::Header* pHeader = oHttpMsg.add_headers();
+                //                        pHeader->set_header_name("Content-Type");
+                //                        pHeader->set_header_value("application/json; charset=UTF-8");
+                //                        oHttpMsg.set_body("{\"error\":\"10002: no handler to dispose cmd 1005!\"}");
+                //                        oOutMsgBody.set_body(oHttpMsg.SerializeAsString());
+                //--------------------------------------------------------------------------------------
             }
         }
         else

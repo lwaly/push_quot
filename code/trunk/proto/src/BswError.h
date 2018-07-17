@@ -10,7 +10,7 @@
 #ifndef _BSW_ERROR_H_
 #define _BSW_ERROR_H_
 
-namespace bsw
+namespace mg
 {
 
 /**

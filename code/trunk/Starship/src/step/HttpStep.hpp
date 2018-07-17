@@ -12,7 +12,7 @@
 
 #include "Step.hpp"
 #include "protocol/http.pb.h"
-#include "codec/HttpCodec.hpp"
+//#include "codec/HttpCodec.hpp"
 
 namespace oss
 {

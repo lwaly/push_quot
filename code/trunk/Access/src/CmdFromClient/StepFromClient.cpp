@@ -9,7 +9,7 @@
  ******************************************************************************/
 #include "StepFromClient.hpp"
 
-namespace bsw
+namespace mg
 {
 
 StepFromClient::StepFromClient(
@@ -75,4 +75,4 @@ oss::E_CMD_STATUS StepFromClient::Timeout()
     return(oss::STATUS_CMD_FAULT);
 }
 
-} /* namespace bsw */
+} /* namespace mg */

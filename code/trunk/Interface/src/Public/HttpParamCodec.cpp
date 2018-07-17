@@ -14,7 +14,7 @@
 #include "HttpUrlCoder.hpp"
 #include "util/http/http_parser.h"
 
-namespace bsw
+namespace mg
 {
 
 HttpParamCodec::HttpParamCodec()
@@ -332,4 +332,4 @@ void HttpParamCodec::ReplaceString(std::string &strSrc, const std::string &strOl
     }
 }
 
-} /* namespace bsw */
+} /* namespace mg */

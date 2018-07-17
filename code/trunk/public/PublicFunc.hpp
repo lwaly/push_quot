@@ -12,13 +12,13 @@
 
 #include "Public.hpp"
 
-namespace bsw
+namespace mg
 {
 
 std::string IntToString(uint32 uiValue);
 std::string Int64ToString(uint64 uiValue);
 std::string FormatString(const char* pString, ...);
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _PUBLIC_FUNC_HPP_ */

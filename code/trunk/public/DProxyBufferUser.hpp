@@ -12,7 +12,7 @@
 
 #include "Public.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class DProxyBufferUser
@@ -31,6 +31,6 @@ public:
 		uint32 uiAppType, uint32 uiUserID, uint32 uiClientType, const std::string& strIdentify, const std::string& strDevice);
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _DPROXY_BUFFER_USER_HPP_ */

@@ -8,7 +8,7 @@
  * Modify history:
  ******************************************************************************/
 #include "HttpStep.hpp"
-
+#include "util/http/http_parser.h"
 namespace oss
 {
 

@@ -12,10 +12,12 @@
 #include "PublicFunc.hpp"
 #include "DataProxyClient.hpp"
 #include "ISyncDProxyProtocol.hpp"
+#include "ImRedisProto.h"
+#include "ImTableName.h"
 
 #define MAX_REQ_COUNT 100
 
-namespace bsw
+namespace mg
 {
 
     DataProxyClient::DataProxyClient()
@@ -37,6 +39,12 @@ namespace bsw
         if (!m_oDpEventOther.Init(pEvent))
         {
             LOG4_ERROR("init data proxy other failed!");
+            return false;
+        }
+
+        if (!m_oDpEventQuot.Init(pEvent, pLabor))
+        {
+            LOG4_ERROR("init data proxy audio failed!");
             return false;
         }
 
@@ -63,6 +71,7 @@ namespace bsw
 
         if (bDataProxyEvent)
         {
+            LOG4_DEBUG("cmd rsp = %u", uiCmdRsp);
             do
             {
                 DataMem::MemRsp oRsp;
@@ -85,10 +94,14 @@ namespace bsw
                         }
                     }
                 }
+                iResult = m_oDpEventQuot.HandleEvent(uiCmdRsp, oErrInfo, oRsp);
+                if (iResult != HR_UNKOWN)
+                    break;
             } while (0);
         }
         else
         {
+            LOG4_DEBUG("cmd rsp = %u", uiCmdRsp);
             do
             {
                 iResult = m_oDpEventOther.HandleEvent(uiCmdRsp, oErrInfo, oContext);
@@ -97,7 +110,7 @@ namespace bsw
 
             } while (0);
         }
-
+        LOG4_DEBUG("iResult = %u", iResult);
         if (HR_UNKOWN == iResult) //找不到相关的协议
         {
             SET_TMP_ERR_INFO(ERR_STEP_RUNNING_ERROR, "undefine data proxy command!");
@@ -118,6 +131,7 @@ namespace bsw
 
     bool DataProxyClient::SendToDataProxy(uint32 uiReqCmd, const std::string& strBuf)
     {
+
         if (strBuf.empty() || m_uiReqSum++ >= MAX_REQ_COUNT)
         {
             LOG4_ERROR("invalid data!, buf = %s, req sum = %u", strBuf.c_str(), m_uiReqSum);
@@ -206,4 +220,27 @@ namespace bsw
         return ERR_OK;
     }
 
-} /* namespace bsw */
+    uint32 DataProxyClient::QuotConfigGet()
+    {
+        LOG4_TRACE(__FUNCTION__);
+        std::string strDProxyBuffer;
+        char szRedisKey[64] = { 0 };
+        snprintf(szRedisKey, sizeof(szRedisKey), "%u:%u:%u", REDIS_T_HASH, DATA_QUOT_CONFIG, SYSTEM_ID);
+
+        oss::MemOperator oMemOper(SYSTEM_ID, STR_TABLE_QUOT_CONFIG, DataMem::MemOperate::DbOperate::SELECT, szRedisKey, "hmset", "hmget");
+
+        //获得音频类型列表
+        oMemOper.AddField("id");
+        oMemOper.AddField("supports_search");
+        oMemOper.AddField("supports_group_request");
+        oMemOper.AddField("supported_resolutions");
+        oMemOper.AddField("supports_marks");
+        oMemOper.AddField("supports_time");
+
+        if (!SendToDataProxy(CMD_DP_REQ_QUOT_CONFIG, oMemOper.MakeMemOperate()->SerializeAsString()))
+            return ERR_SEND_TO_DATAPROXY;
+
+        return ERR_OK;
+    }
+
+} /* namespace mg */

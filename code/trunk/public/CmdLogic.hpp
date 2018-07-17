@@ -13,7 +13,7 @@
 #include "CmdEx.hpp"
 #include "Public.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class CmdLogic : public CmdEx
@@ -28,11 +28,11 @@ public:
                     const MsgBody& oInMsgBody);
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #define CMD_CLASS_MAKE(CmdClass, StepClass)			  \
 													  \
-namespace bsw										  \
+namespace mg										  \
 {													  \
 class CmdClass : public CmdLogic					  \
 {													  \

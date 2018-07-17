@@ -15,7 +15,7 @@
 #include "DataProxyEventOther.hpp"
 #include "step/Step.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class DataProxyClient
@@ -63,6 +63,6 @@ private:
 	int m_iReqCount; //正在执行请求个数（支持同类型的多个请求同时进行）。
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif /* _DATA_PROXY_CLIENT_HPP_ */

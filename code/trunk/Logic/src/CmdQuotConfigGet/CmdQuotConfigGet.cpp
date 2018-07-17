@@ -4,7 +4,7 @@
 * @brief    获取行情推送配置
 * @author   ly
 * @date:    2018年7月12日
-* @note     
+* @note
 * Modify history:
 ******************************************************************************/
 
@@ -16,20 +16,20 @@ extern "C" {
 #endif
     oss::Cmd* create()
     {
-        oss::Cmd* pCmd = new bsw::CmdQuotConfigGet();
+        oss::Cmd* pCmd = new mg::CmdQuotConfigGet();
         return(pCmd);
     }
 #ifdef __cplusplus
 }
 #endif
 
-namespace bsw
+namespace mg
 {
-bool CmdQuotConfigGet::AnyMessageLogic(const CContext& oInContext)
-{
-    LOG4_TRACE(__FUNCTION__);
-    common::errorinfo oErrInfo;
-    return (ERR_OK == RegisterSyncStep(oErrInfo, new StepQuotConfigGet(oInContext)));
-}
+    bool CmdQuotConfigGet::AnyMessageLogic(const CContext& oInContext)
+    {
+        LOG4_TRACE(__FUNCTION__);
+        common::errorinfo oErrInfo;
+        return (ERR_OK == RegisterSyncStep(oErrInfo, new StepQuotConfigGet(oInContext)));
+    }
 
-} /* namespace bsw */
+} /* namespace mg */

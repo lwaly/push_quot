@@ -13,7 +13,7 @@
 
 #include "SessionUserInfo.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class DataProxySession

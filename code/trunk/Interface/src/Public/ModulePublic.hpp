@@ -15,7 +15,7 @@
 #include <user_base_info.pb.h>
 
 
-namespace bsw
+namespace mg
 {
 typedef char int8;
 typedef unsigned char uint8;

@@ -14,7 +14,7 @@
 #include "Public.hpp"
 #include "session/Session.hpp"
 
-namespace bsw
+namespace mg
 {
 
 class SessionUserInfo : public oss::Session
@@ -22,7 +22,7 @@ class SessionUserInfo : public oss::Session
 public:
 	SessionUserInfo(uint32 uiSessionID, ev_tstamp dSessionTimeout = 60.0);
 	virtual ~SessionUserInfo();
-	static std::string SessionClass() { return std::string("bsw::SessionUserInfo");}
+	static std::string SessionClass() { return std::string("mg::SessionUserInfo");}
 
 	virtual oss::E_CMD_STATUS Timeout();
 
@@ -43,6 +43,6 @@ private:
 	std::map<uint16, std::map<uint16, USER_STATUS_INFO> > m_mapUserStatusInfo; //<app type, <client type, info> >
 };
 
-} /* namespace bsw */
+} /* namespace mg */
 
 #endif //_SESSION_USER_INFO_H_
